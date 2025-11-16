@@ -4,14 +4,27 @@ import React from 'react';
 import { Bell, Search, User, ChevronDown, LogOut, Settings as SettingsIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
+import Link from 'next/link';
 
 export default function Header() {
   const { user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
+  };
+
+  // Get user initials for avatar
+  const getInitials = (name?: string, username?: string) => {
+    const displayName = name || username || "U";
+    return displayName
+      .split(" ")
+      .map(n => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
@@ -36,9 +49,12 @@ export default function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <User className="h-4 w-4 text-white" />
-              </div>
+              <Avatar className="w-8 h-8">
+                <AvatarImage src="" alt={user?.name || user?.username} />
+                <AvatarFallback className="bg-blue-500 text-white text-sm">
+                  {getInitials(user?.name, user?.username)}
+                </AvatarFallback>
+              </Avatar>
               <span className="hidden sm:block">{user?.name || user?.username || 'User'}</span>
               <ChevronDown className="h-4 w-4" />
             </Button>
@@ -51,16 +67,20 @@ export default function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+            <DropdownMenuItem asChild>
+              <Link href="/profile" className="cursor-pointer">
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <SettingsIcon className="mr-2 h-4 w-4" />
-              <span>Settings</span>
+            <DropdownMenuItem asChild>
+              <Link href="/settings" className="cursor-pointer">
+                <SettingsIcon className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
+            <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>

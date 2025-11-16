@@ -14,6 +14,7 @@ export const policies: Record<Role, Policy> = {
     "*": { actions: ["*"] }, // full access
   },
   DEPARTMENT_ADMIN: {
+    "/profile": { actions: ["view", "edit"] },
     "/offices": { actions: ["view", "edit"] },
     "/items": { actions: ["view", "edit", "create"] },
     "/purchases": { actions: ["view", "edit", "create"] },
@@ -22,6 +23,7 @@ export const policies: Record<Role, Policy> = {
     "/dashboard": { actions: ["view"] },
   },
   FACULTY_ADMIN: {
+    "/profile": { actions: ["view", "edit"] },
     "/office": { actions: ["view", "edit"] },
     "/offices": { actions: ["view", "edit", "create"] },
     "/items": { actions: ["view", "edit", "create"] },
@@ -31,6 +33,7 @@ export const policies: Record<Role, Policy> = {
     "/dashboard": { actions: ["view"] },
   },
   OFFICE_MANAGER: {
+    "/profile": { actions: ["view", "edit"] },
     "/offices": { actions: ["view"] },
     "/items": { actions: ["view", "edit", "create"] },
     "/purchases": { actions: ["view", "edit", "create"] },
@@ -39,6 +42,7 @@ export const policies: Record<Role, Policy> = {
     "/dashboard": { actions: ["view"] },
   },
   USER: {
+    "/profile": { actions: ["view", "edit"] },
     "/dashboard": { actions: ["view"] },
     "/offices": { actions: ["view"] },
     "/items": { actions: ["view"] },
@@ -46,6 +50,7 @@ export const policies: Record<Role, Policy> = {
     "/distributions": { actions: ["view"] },
   },
   VIEWER: {
+    "/profile": { actions: ["view", "edit"] },
     "/offices": { actions: ["view"] },
     "/items": { actions: ["view"] },
     "/purchases": { actions: ["view"] },

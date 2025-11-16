@@ -19,7 +19,8 @@ import {
   AlertTriangle,
   Building2,
   TrendingUp,
-  Ruler
+  Ruler,
+  User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SidebarItems } from '@/types/constant';
@@ -69,6 +70,7 @@ export default function Sidebar() {
     {
       title: 'System',
       items: [
+        { icon: User, label: 'Profile', href: '/profile' },
         { icon: FileText, label: 'Audit Logs', href: '/logs' },
         { icon: Settings, label: 'Settings', href: '/settings' },
       ]
