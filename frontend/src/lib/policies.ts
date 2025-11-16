@@ -13,6 +13,24 @@ export const policies: Record<Role, Policy> = {
   ADMIN: {
     "*": { actions: ["*"] }, // full access
   },
+  PROCUREMENT_MANAGER: {
+    "/profile": { actions: ["view", "edit"] },
+    "/offices": { actions: ["view"] },
+    "/items": { actions: ["view", "edit", "create"] },
+    "/purchases": { actions: ["view", "edit", "create"] },
+    "/distributions": { actions: ["view", "edit", "create"] },
+    "/reports": { actions: ["view"] },
+    "/dashboard": { actions: ["view"] },
+  },
+  DEPARTMENT_HEAD: {
+    "/profile": { actions: ["view", "edit"] },
+    "/offices": { actions: ["view", "edit"] },
+    "/items": { actions: ["view", "edit", "create"] },
+    "/purchases": { actions: ["view", "edit", "create"] },
+    "/distributions": { actions: ["view", "edit", "create"] },
+    "/reports": { actions: ["view"] },
+    "/dashboard": { actions: ["view"] },
+  },
   DEPARTMENT_ADMIN: {
     "/profile": { actions: ["view", "edit"] },
     "/offices": { actions: ["view", "edit"] },
@@ -32,6 +50,15 @@ export const policies: Record<Role, Policy> = {
     "/reports": { actions: ["view"] },
     "/dashboard": { actions: ["view"] },
   },
+  FACULTY_MEMBER: {
+    "/profile": { actions: ["view", "edit"] },
+    "/dashboard": { actions: ["view"] },
+    "/offices": { actions: ["view"] },
+    "/items": { actions: ["view"] },
+    "/purchases": { actions: ["view"] },
+    "/distributions": { actions: ["view"] },
+    "/reports": { actions: ["view"] },
+  },
   OFFICE_MANAGER: {
     "/profile": { actions: ["view", "edit"] },
     "/offices": { actions: ["view"] },
@@ -40,6 +67,20 @@ export const policies: Record<Role, Policy> = {
     "/distributions": { actions: ["view", "edit", "create"] },
     "/reports": { actions: ["view"] },
     "/dashboard": { actions: ["view"] },
+  },
+  STAFF: {
+    "/profile": { actions: ["view", "edit"] },
+    "/dashboard": { actions: ["view"] },
+    "/offices": { actions: ["view"] },
+    "/items": { actions: ["view", "edit"] },
+    "/purchases": { actions: ["view"] },
+    "/distributions": { actions: ["view", "edit"] },
+  },
+  STUDENT: {
+    "/profile": { actions: ["view", "edit"] },
+    "/dashboard": { actions: ["view"] },
+    "/offices": { actions: ["view"] },
+    "/items": { actions: ["view"] },
   },
   USER: {
     "/profile": { actions: ["view", "edit"] },

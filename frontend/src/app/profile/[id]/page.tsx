@@ -41,9 +41,21 @@ export default function ProfilePage() {
         label: "Admin",
         className: "bg-gradient-to-r from-red-600 to-red-700 text-white border-0 font-semibold px-4 py-1.5 text-sm shadow-sm"
       },
+      PROCUREMENT_MANAGER: {
+        label: "Procurement Manager",
+        className: "bg-gradient-to-r from-orange-500 to-orange-600 text-white border-0 font-semibold px-4 py-1.5 text-sm shadow-sm"
+      },
+      DEPARTMENT_HEAD: {
+        label: "Department Head",
+        className: "bg-gradient-to-r from-teal-500 to-teal-600 text-white border-0 font-semibold px-4 py-1.5 text-sm shadow-sm"
+      },
       FACULTY_ADMIN: { 
         label: "Faculty Admin",
         className: "bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 font-semibold px-4 py-1.5 text-sm shadow-sm"
+      },
+      FACULTY_MEMBER: {
+        label: "Faculty Member",
+        className: "bg-gradient-to-r from-cyan-500 to-cyan-600 text-white border-0 font-semibold px-4 py-1.5 text-sm shadow-sm"
       },
       DEPARTMENT_ADMIN: { 
         label: "Department Admin",
@@ -52,6 +64,14 @@ export default function ProfilePage() {
       OFFICE_MANAGER: { 
         label: "Office Manager",
         className: "bg-gradient-to-r from-purple-500 to-purple-600 text-white border-0 font-semibold px-4 py-1.5 text-sm shadow-sm"
+      },
+      STAFF: {
+        label: "Staff",
+        className: "bg-gradient-to-r from-green-500 to-green-600 text-white border-0 font-semibold px-4 py-1.5 text-sm shadow-sm"
+      },
+      STUDENT: {
+        label: "Student",
+        className: "bg-slate-100 text-slate-700 border-slate-300 font-semibold px-4 py-1.5 text-sm"
       },
       VIEWER: { 
         label: "Viewer",
