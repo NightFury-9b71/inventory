@@ -96,6 +96,8 @@ public class PurchaseService {
 
             purchaseItemRepository.save(purchaseItem);
 
+            savedPurchase.addPurchaseItem(purchaseItem);
+
             // Generate barcodes and create ItemInstance for each quantity
             for (int i = 0; i < itemDTO.getQuantity(); i++) {
                 String barcode = barcodeGenerationService.generateBarcode(item.getCode());
@@ -216,6 +218,21 @@ public class PurchaseService {
                 .limit(10)
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deletePurchase(Long id) {
+        Purchase purchase = purchaseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Purchase not found with id: " + id));
+        
+        // Soft delete by setting isActive to false
+        purchase.setIsActive(false);
+        purchaseRepository.save(purchase);
+        
+        // Optionally, you could also reverse the stock updates
+        for (PurchaseItem pi : purchase.getPurchaseItems()) {
+            itemService.updateStock(pi.getItem().getId(), -pi.getQuantity());
+        }
     }
 
     public List<ItemInstanceDTO> getItemInstancesByPurchase(Long purchaseId) {

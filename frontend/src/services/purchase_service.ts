@@ -47,6 +47,10 @@ export const updatePurchase = async (id: number, purchase: Partial<PurchaseFormD
   return response.data;
 };
 
+export const deletePurchase = async (id: number): Promise<void> => {
+  await api.delete(ENDPOINTS.purchase_by_id(id));
+};
+
 export const getRecentPurchases = async (): Promise<Purchase[]> => {
   const response = await api.get(ENDPOINTS.recent_purchases);
   return response.data;

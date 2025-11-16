@@ -9,6 +9,7 @@ import EditPurchaseHeader from "./components/EditPurchaseHeader";
 import EditPurchaseForm from "./components/EditPurchaseForm";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
+import { toast } from "sonner";
 
 export default function EditPurchasePage() {
   const params = useParams();
@@ -27,7 +28,9 @@ export default function EditPurchasePage() {
         const fetchedPurchase = await getPurchaseById(Number(purchaseId));
         setPurchase(fetchedPurchase);
       } catch (err: any) {
-        setError(err.message || 'Failed to load purchase');
+        const errorMsg = err.message || 'Failed to load purchase';
+        setError(errorMsg);
+        toast.error(errorMsg);
       } finally {
         setLoading(false);
       }
@@ -60,11 +63,12 @@ export default function EditPurchasePage() {
         purchaseDate: purchase.purchaseDate,
         invoiceNumber: purchase.invoiceNumber,
         remarks: purchase.remarks,
-        purchasedById: purchase.purchasedById,
-        items: purchase.items,
+        purchasedBy: purchase.purchasedBy,
+        purchaseItems: purchase.purchaseItems,
       };
 
       await updatePurchase(Number(purchaseId), updateData);
+      toast.success('Purchase updated successfully');
       router.push(`/purchases/${purchaseId}`);
     } catch (err: any) {
       console.log('Error updating purchase:', err);
@@ -72,7 +76,9 @@ export default function EditPurchasePage() {
         || err.response?.data 
         || err.message 
         || 'Failed to update purchase. Please check all required fields.';
-      setError(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
+      const errorString = typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage);
+      setError(errorString);
+      toast.error(errorString);
     } finally {
       setSaving(false);
     }

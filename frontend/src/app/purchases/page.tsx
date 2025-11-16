@@ -13,10 +13,11 @@ import {
   useTable
 } from "@/components/table";
 import { Purchase } from "@/types/purchase";
-import { getPurchases } from "@/services/purchase_service";
+import { getPurchases, deletePurchase } from "@/services/purchase_service";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function PurchaseTablePage() {
   const router = useRouter();
@@ -68,6 +69,16 @@ export default function PurchaseTablePage() {
     crud: {
       basePath: '/purchases',
       getAll: getPurchases,
+      delete: async (id: string | number) => {
+        try {
+          await deletePurchase(Number(id));
+          toast.success('Purchase deleted successfully');
+        } catch (error) {
+          console.error('Error deleting purchase:', error);
+          toast.error('Failed to delete purchase');
+          throw error;
+        }
+      },
     },
   });
 

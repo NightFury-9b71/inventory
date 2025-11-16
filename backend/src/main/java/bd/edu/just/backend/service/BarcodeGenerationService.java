@@ -1,19 +1,21 @@
 package bd.edu.just.backend.service;
 
+import bd.edu.just.backend.repository.ItemInstanceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class BarcodeGenerationService {
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private final Set<String> generatedBarcodes = new HashSet<>();
-    private final AtomicInteger dailyCounter = new AtomicInteger(1);
+    
+    @Autowired
+    private ItemInstanceRepository itemInstanceRepository;
 
     /**
      * Generate a unique barcode for an item instance
@@ -23,7 +25,7 @@ public class BarcodeGenerationService {
     public synchronized String generateBarcode(String itemCode) {
         String barcode;
         int attempts = 0;
-        final int MAX_ATTEMPTS = 100;
+        final int MAX_ATTEMPTS = 1000;
 
         do {
             barcode = createBarcode(itemCode);
@@ -32,9 +34,8 @@ public class BarcodeGenerationService {
             if (attempts > MAX_ATTEMPTS) {
                 throw new RuntimeException("Failed to generate unique barcode after " + MAX_ATTEMPTS + " attempts");
             }
-        } while (generatedBarcodes.contains(barcode));
+        } while (itemInstanceRepository.existsByBarcode(barcode));
 
-        generatedBarcodes.add(barcode);
         return barcode;
     }
 
@@ -45,9 +46,12 @@ public class BarcodeGenerationService {
         // Get item code (clean and uppercase)
         String cleanItemCode = itemCode.replaceAll("[^A-Za-z0-9]", "").toUpperCase();
 
+        // Count existing barcodes for this item code today
+        String barcodePrefix = String.format("%s-%s-", datePart, cleanItemCode);
+        long count = itemInstanceRepository.countByBarcodeStartingWith(barcodePrefix);
+        
         // Get next item count for today (6 digits, zero-padded)
-        int count = dailyCounter.getAndIncrement();
-        String countPart = String.format("%06d", count);
+        String countPart = String.format("%06d", count + 1);
 
         // Combine parts
         return String.format("%s-%s-%s",
@@ -68,19 +72,21 @@ public class BarcodeGenerationService {
         }
         
         return barcodes;
-    }    /**
-     * Clear the in-memory cache of generated barcodes
-     * This should be called periodically or on application restart
-     */
-    public void clearCache() {
-        generatedBarcodes.clear();
-        dailyCounter.set(1); // Reset counter
     }
 
     /**
-     * Reset the daily counter (useful for testing or daily maintenance)
+     * Deprecated: No longer needed with database-backed barcode generation
      */
+    @Deprecated
+    public void clearCache() {
+        // No-op: no cache to clear
+    }
+
+    /**
+     * Deprecated: No longer needed with database-backed barcode generation
+     */
+    @Deprecated
     public void resetDailyCounter() {
-        dailyCounter.set(1);
+        // No-op: no counter to reset
     }
 }

@@ -33,4 +33,6 @@ public interface ItemInstanceRepository extends JpaRepository<ItemInstance, Long
     List<ItemInstance> findByDistributedToOffice(Office office);
 
     boolean existsByBarcode(String barcode);
+    
+    long countByBarcodeStartingWith(String barcodePrefix);
 }

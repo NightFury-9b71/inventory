@@ -94,6 +94,16 @@ public class PurchaseController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePurchase(@PathVariable Long id) {
+        try {
+            purchaseService.deletePurchase(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{id}/barcodes")
     public ResponseEntity<List<ItemInstanceDTO>> getPurchaseBarcodes(@PathVariable Long id) {
         try {

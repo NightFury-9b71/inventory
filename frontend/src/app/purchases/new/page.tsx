@@ -7,6 +7,7 @@ import { createPurchase } from "@/services/purchase_service";
 import { useAuth } from "@/contexts/AuthContext";
 import NewPurchaseHeader from "./components/NewPurchaseHeader";
 import NewPurchaseForm from "./components/NewPurchaseForm";
+import { toast } from "sonner";
 
 export default function NewPurchasePage() {
   const router = useRouter();
@@ -73,6 +74,7 @@ export default function NewPurchasePage() {
 
       console.error('Sending purchase data:', purchaseData);
       await createPurchase(purchaseData);
+      toast.success('Purchase created successfully');
       router.push('/purchases');
     } catch (err: unknown) {
       console.error('Error creating purchase:', err);
@@ -86,6 +88,7 @@ export default function NewPurchasePage() {
       }
       
       setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setSaving(false);
     }

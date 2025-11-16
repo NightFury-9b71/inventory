@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,8 +11,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 type DeleteConfirmationDialogProps = {
   open: boolean;
@@ -20,7 +18,7 @@ type DeleteConfirmationDialogProps = {
   onConfirm: () => void;
   title: string;
   description: string;
-  confirmationText: string;
+  confirmationText?: string; // Made optional since it's no longer used
   warningMessage?: string;
   isDeleting?: boolean;
 };
@@ -31,28 +29,17 @@ export function DeleteConfirmationDialog({
   onConfirm,
   title,
   description,
-  confirmationText,
   warningMessage,
   isDeleting = false,
 }: DeleteConfirmationDialogProps) {
-  const [inputValue, setInputValue] = useState("");
-  const isConfirmDisabled = inputValue !== confirmationText || isDeleting;
-
   const handleConfirm = () => {
-    if (!isConfirmDisabled) {
+    if (!isDeleting) {
       onConfirm();
     }
   };
 
-  const handleOpenChange = (newOpen: boolean) => {
-    if (!newOpen) {
-      setInputValue("");
-    }
-    onOpenChange(newOpen);
-  };
-
   return (
-    <AlertDialog open={open} onOpenChange={handleOpenChange}>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -65,26 +52,13 @@ export function DeleteConfirmationDialog({
                 </div>
               </div>
             )}
-            <div className="space-y-2 pt-2">
-              <Label htmlFor="confirm-input" className="text-foreground">
-                Type <span className="font-semibold">{confirmationText}</span> to confirm:
-              </Label>
-              <Input
-                id="confirm-input"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder={`Type "${confirmationText}" to confirm`}
-                disabled={isDeleting}
-                autoComplete="off"
-              />
-            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
-            disabled={isConfirmDisabled}
+            disabled={isDeleting}
             className="bg-destructive hover:bg-destructive/90"
           >
             {isDeleting ? "Deleting..." : "Delete"}

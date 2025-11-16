@@ -6,6 +6,7 @@ export const ENDPOINTS = {
   distribution_by_id: (id: number) => `/distributions/${id}`,
   create_distribution: "/distributions",
   update_distribution: (id: number) => `/distributions/${id}`,
+  delete_distribution: (id: number) => `/distributions/${id}`,
   recent_distributions: "/distributions/recent",
   distributions_by_date_range: "/distributions/date-range",
 };
@@ -31,6 +32,10 @@ export const createDistribution = async (distribution: DistributionFormData): Pr
 export const updateDistribution = async (id: number, distribution: Partial<DistributionFormData>): Promise<Distribution> => {
   const response = await api.put(ENDPOINTS.update_distribution(id), distribution);
   return response.data;
+};
+
+export const deleteDistribution = async (id: number): Promise<void> => {
+  await api.delete(ENDPOINTS.delete_distribution(id));
 };
 
 export const getRecentDistributions = async (): Promise<Distribution[]> => {

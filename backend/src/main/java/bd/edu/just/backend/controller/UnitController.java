@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/units")
-// @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 public class UnitController {
 
     @Autowired

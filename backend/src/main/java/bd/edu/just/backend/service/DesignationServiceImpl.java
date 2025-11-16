@@ -6,7 +6,7 @@ import bd.edu.just.backend.model.Office;
 import bd.edu.just.backend.model.Role;
 import bd.edu.just.backend.model.User;
 import bd.edu.just.backend.repository.DesignationRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
