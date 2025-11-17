@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Run frontend and backend concurrently
+pkill -f "spring-boot:run"
 
 # Start backend
 cd backend

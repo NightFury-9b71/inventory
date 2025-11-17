@@ -27,6 +27,11 @@ export const getItemByCode = async (code: string): Promise<Item> => {
   return response.data;
 };
 
+export const getItemInstanceByBarcode = async (barcode: string) => {
+  const response = await api.get(`/purchases/barcode/${barcode}`);
+  return response.data;
+};
+
 export const searchItems = async (query: string): Promise<Item[]> => {
   const response = await api.get(ENDPOINTS.search_items(query));
   return response.data;

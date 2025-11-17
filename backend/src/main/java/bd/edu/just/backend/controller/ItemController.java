@@ -5,13 +5,13 @@ import bd.edu.just.backend.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/items")
-// @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 public class ItemController {
 
     @Autowired
@@ -51,6 +51,7 @@ public class ItemController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'PROCUREMENT_MANAGER', 'DEPARTMENT_HEAD')")
     public ResponseEntity<ItemDTO> createItem(@RequestBody ItemDTO itemDTO) {
         try {
             ItemDTO created = itemService.createItem(itemDTO);
@@ -61,6 +62,7 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'PROCUREMENT_MANAGER', 'DEPARTMENT_HEAD', 'STAFF')")
     public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
         try {
             ItemDTO updated = itemService.updateItem(id, itemDTO);
@@ -71,6 +73,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'PROCUREMENT_MANAGER')")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         try {
             itemService.deleteItem(id);

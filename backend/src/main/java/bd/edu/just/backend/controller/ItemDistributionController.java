@@ -3,6 +3,7 @@ package bd.edu.just.backend.controller;
 import bd.edu.just.backend.dto.ItemDistributionDTO;
 import bd.edu.just.backend.dto.ItemDistributionRequestDTO;
 import bd.edu.just.backend.service.ItemDistributionService;
+import bd.edu.just.backend.model.DistributionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,5 +64,21 @@ public class ItemDistributionController {
     public ResponseEntity<List<ItemDistributionDTO>> getRecentDistributions() {
         List<ItemDistributionDTO> distributions = distributionService.getRecentDistributions();
         return ResponseEntity.ok(distributions);
+    }
+
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<ItemDistributionDTO> approveDistribution(@PathVariable Long id) {
+        ItemDistributionRequestDTO requestDTO = new ItemDistributionRequestDTO();
+        requestDTO.setStatus(DistributionStatus.APPROVED);
+        ItemDistributionDTO updatedDistribution = distributionService.updateDistribution(id, requestDTO);
+        return ResponseEntity.ok(updatedDistribution);
+    }
+
+    @PutMapping("/{id}/reject")
+    public ResponseEntity<ItemDistributionDTO> rejectDistribution(@PathVariable Long id) {
+        ItemDistributionRequestDTO requestDTO = new ItemDistributionRequestDTO();
+        requestDTO.setStatus(DistributionStatus.REJECTED);
+        ItemDistributionDTO updatedDistribution = distributionService.updateDistribution(id, requestDTO);
+        return ResponseEntity.ok(updatedDistribution);
     }
 }

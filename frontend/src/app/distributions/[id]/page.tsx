@@ -32,6 +32,11 @@ export default function DistributionDetailPage() {
     },
   });
 
+  const handleStatusChange = () => {
+    // Refresh the item
+    window.location.reload();
+  };
+
   // Loading State
   if (loading) {
     return <LoadingState />;
@@ -49,11 +54,13 @@ export default function DistributionDetailPage() {
     <div>
       <HeaderActions
         distributionId={fullDistribution.id}
+        distribution={fullDistribution}
         itemName={fullDistribution.itemName}
         handleBack={handleBack}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         deleting={deleting}
+        onStatusChange={handleStatusChange}
       />
 
       <div className="grid gap-6 md:grid-cols-2">

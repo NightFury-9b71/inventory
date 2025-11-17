@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="create-roles-table" author="system">
+        <comment>Create roles table</comment>
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="purchasing_power" type="TINYINT(1)" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-users-table" author="system">
+        <comment>Create users table</comment>
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-offices-table" author="system">
+        <comment>Create offices table</comment>
+        <createTable tableName="offices">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="name_bn" type="VARCHAR(255)"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(50)">
+                <constraints unique="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="order_index" type="INT"/>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="offices" baseColumnNames="parent_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_offices_parent"/>
+    </changeSet>
+
+    <changeSet id="create-designations-table" author="system">
+        <comment>Create designations table</comment>
+        <createTable tableName="designations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="office_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_primary" type="TINYINT(1)" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assigned_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="designations" baseColumnNames="user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_designations_user" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="designations" baseColumnNames="role_id"
+                                 referencedTableName="roles" referencedColumnNames="id"
+                                 constraintName="fk_designations_role" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="designations" baseColumnNames="office_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_designations_office" onDelete="CASCADE"/>
+        <addUniqueConstraint tableName="designations" columnNames="user_id, role_id, office_id, is_active"
+                             constraintName="unique_active_designation"/>
+        <createIndex tableName="designations" indexName="idx_user_active">
+            <column name="user_id"/>
+            <column name="is_active"/>
+        </createIndex>
+        <createIndex tableName="designations" indexName="idx_office_active">
+            <column name="office_id"/>
+            <column name="is_active"/>
+        </createIndex>
+        <createIndex tableName="designations" indexName="idx_role_active">
+            <column name="role_id"/>
+            <column name="is_active"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-item-categories-table" author="system">
+        <comment>Create item_categories table</comment>
+        <createTable tableName="item_categories">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name_bn" type="VARCHAR(255)"/>
+            <column name="code" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-units-table" author="system">
+        <comment>Create units table</comment>
+        <createTable tableName="units">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_bn" type="VARCHAR(255)"/>
+            <column name="symbol" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-items-table" author="system">
+        <comment>Create items table</comment>
+        <createTable tableName="items">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_bn" type="VARCHAR(255)"/>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="unit_id" type="BIGINT"/>
+            <column name="quantity" type="INT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="items" baseColumnNames="category_id"
+                                 referencedTableName="item_categories" referencedColumnNames="id"
+                                 constraintName="fk_items_category"/>
+        <addForeignKeyConstraint baseTableName="items" baseColumnNames="unit_id"
+                                 referencedTableName="units" referencedColumnNames="id"
+                                 constraintName="fk_items_unit"/>
+    </changeSet>
+
+    <changeSet id="create-purchases-table" author="system">
+        <comment>Create purchases table</comment>
+        <createTable tableName="purchases">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="total_price" type="DOUBLE" defaultValue="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vendor_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vendor_contact" type="VARCHAR(255)"/>
+            <column name="purchase_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invoice_number" type="VARCHAR(100)"/>
+            <column name="remarks" type="TEXT"/>
+            <column name="purchased_by" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="purchases" baseColumnNames="purchased_by"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_purchases_purchased_by"/>
+    </changeSet>
+
+    <changeSet id="create-purchase-items-table" author="system">
+        <comment>Create purchase_items table</comment>
+        <createTable tableName="purchase_items">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="purchase_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit_price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="purchase_items" baseColumnNames="purchase_id"
+                                 referencedTableName="purchases" referencedColumnNames="id"
+                                 constraintName="fk_purchase_items_purchase"/>
+        <addForeignKeyConstraint baseTableName="purchase_items" baseColumnNames="item_id"
+                                 referencedTableName="items" referencedColumnNames="id"
+                                 constraintName="fk_purchase_items_item"/>
+    </changeSet>
+
+    <changeSet id="create-item-instances-table" author="system">
+        <comment>Create item_instances table</comment>
+        <createTable tableName="item_instances">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="purchase_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="barcode" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="unit_price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)" defaultValue="IN_STOCK">
+                <constraints nullable="false"/>
+            </column>
+            <column name="distributed_to_office_id" type="BIGINT"/>
+            <column name="distributed_at" type="TIMESTAMP"/>
+            <column name="owner_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remarks" type="TEXT"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="item_instances" baseColumnNames="item_id"
+                                 referencedTableName="items" referencedColumnNames="id"
+                                 constraintName="fk_item_instances_item"/>
+        <addForeignKeyConstraint baseTableName="item_instances" baseColumnNames="purchase_id"
+                                 referencedTableName="purchases" referencedColumnNames="id"
+                                 constraintName="fk_item_instances_purchase"/>
+        <addForeignKeyConstraint baseTableName="item_instances" baseColumnNames="distributed_to_office_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_item_instances_distributed_to_office"/>
+        <addForeignKeyConstraint baseTableName="item_instances" baseColumnNames="owner_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_item_instances_owner"/>
+        <createIndex tableName="item_instances" indexName="idx_item_instances_owner">
+            <column name="owner_id"/>
+        </createIndex>
+        <createIndex tableName="item_instances" indexName="idx_item_instances_status_owner">
+            <column name="status"/>
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-office-inventory-table" author="system">
+        <comment>Create office_inventory table</comment>
+        <createTable tableName="office_inventory">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="office_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="office_inventory" baseColumnNames="office_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_office_inventory_office" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="office_inventory" baseColumnNames="item_id"
+                                 referencedTableName="items" referencedColumnNames="id"
+                                 constraintName="fk_office_inventory_item" onDelete="CASCADE"/>
+        <addUniqueConstraint tableName="office_inventory" columnNames="office_id, item_id"
+                             constraintName="unique_office_item"/>
+        <createIndex tableName="office_inventory" indexName="idx_office_quantity">
+            <column name="office_id"/>
+            <column name="quantity"/>
+        </createIndex>
+        <createIndex tableName="office_inventory" indexName="idx_item_quantity">
+            <column name="item_id"/>
+            <column name="quantity"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-employees-table" author="system">
+        <comment>Create employees table</comment>
+        <createTable tableName="employees">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_bn" type="VARCHAR(255)"/>
+            <column name="designation" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="employee_code" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="office_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="phone" type="VARCHAR(50)"/>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="employees" baseColumnNames="office_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_employees_office"/>
+    </changeSet>
+
+    <changeSet id="create-item-distributions-table" author="system">
+        <comment>Create item_distributions table</comment>
+        <createTable tableName="item_distributions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="office_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_distributed" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remarks" type="TEXT"/>
+            <column name="status" type="VARCHAR(20)" defaultValue="PENDING">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="item_distributions" baseColumnNames="item_id"
+                                 referencedTableName="items" referencedColumnNames="id"
+                                 constraintName="fk_item_distributions_item"/>
+        <addForeignKeyConstraint baseTableName="item_distributions" baseColumnNames="office_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_item_distributions_office"/>
+        <addForeignKeyConstraint baseTableName="item_distributions" baseColumnNames="user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_item_distributions_user"/>
+    </changeSet>
+
+    <changeSet id="create-item-movements-table" author="system">
+        <comment>Create item_movements table</comment>
+        <createTable tableName="item_movements">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="from_office_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to_office_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="employee_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_moved" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remarks" type="TEXT"/>
+            <column name="is_active" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="item_movements" baseColumnNames="item_id"
+                                 referencedTableName="items" referencedColumnNames="id"
+                                 constraintName="fk_item_movements_item"/>
+        <addForeignKeyConstraint baseTableName="item_movements" baseColumnNames="from_office_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_item_movements_from_office"/>
+        <addForeignKeyConstraint baseTableName="item_movements" baseColumnNames="to_office_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_item_movements_to_office"/>
+        <addForeignKeyConstraint baseTableName="item_movements" baseColumnNames="employee_id"
+                                 referencedTableName="employees" referencedColumnNames="id"
+                                 constraintName="fk_item_movements_employee"/>
+    </changeSet>
+
+    <changeSet id="create-indexes" author="system">
+        <comment>Create additional indexes for better performance</comment>
+        <createIndex tableName="designations" indexName="idx_designations_primary">
+            <column name="user_id"/>
+            <column name="is_primary"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

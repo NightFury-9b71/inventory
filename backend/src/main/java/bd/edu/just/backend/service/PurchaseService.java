@@ -256,6 +256,10 @@ public class PurchaseService {
         dto.setId(instance.getId());
         dto.setItemId(instance.getItem().getId());
         dto.setItemName(instance.getItem().getName());
+        dto.setItemCode(instance.getItem().getCode());
+        dto.setItemDescription(instance.getItem().getDescription());
+        dto.setCategoryName(instance.getItem().getCategory() != null ? 
+            instance.getItem().getCategory().getName() : null);
         dto.setPurchaseId(instance.getPurchase().getId());
         dto.setBarcode(instance.getBarcode());
         dto.setUnitPrice(instance.getUnitPrice());
@@ -264,15 +268,28 @@ public class PurchaseService {
         dto.setCreatedAt(instance.getCreatedAt());
         dto.setUpdatedAt(instance.getUpdatedAt());
         
+        // Distribution info
         if (instance.getDistributedToOffice() != null) {
             dto.setDistributedToOfficeId(instance.getDistributedToOffice().getId());
             dto.setDistributedToOfficeName(instance.getDistributedToOffice().getName());
         }
         dto.setDistributedAt(instance.getDistributedAt());
 
+        // Owner info
         if (instance.getOwner() != null) {
             dto.setOwnerId(instance.getOwner().getId());
             dto.setOwnerName(instance.getOwner().getName());
+        }
+        
+        // Purchase details
+        if (instance.getPurchase() != null) {
+            dto.setVendorName(instance.getPurchase().getVendorName());
+            dto.setVendorContact(instance.getPurchase().getVendorContact());
+            dto.setPurchaseDate(instance.getPurchase().getPurchaseDate());
+            dto.setInvoiceNumber(instance.getPurchase().getInvoiceNumber());
+            if (instance.getPurchase().getPurchasedBy() != null) {
+                dto.setPurchasedByName(instance.getPurchase().getPurchasedBy().getName());
+            }
         }
         
         return dto;

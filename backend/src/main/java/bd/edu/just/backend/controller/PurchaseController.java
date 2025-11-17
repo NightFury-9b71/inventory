@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -47,6 +48,7 @@ public class PurchaseController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'PROCUREMENT_MANAGER', 'DEPARTMENT_HEAD')")
     public ResponseEntity<?> createPurchase(@RequestBody PurchaseDTO purchaseDTO) {
         try {
             // Validation
@@ -85,6 +87,7 @@ public class PurchaseController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'PROCUREMENT_MANAGER', 'DEPARTMENT_HEAD')")
     public ResponseEntity<PurchaseDTO> updatePurchase(@PathVariable Long id, @RequestBody PurchaseDTO purchaseDTO) {
         try {
             PurchaseDTO updated = purchaseService.updatePurchase(id, purchaseDTO);
@@ -95,6 +98,7 @@ public class PurchaseController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'PROCUREMENT_MANAGER')")
     public ResponseEntity<Void> deletePurchase(@PathVariable Long id) {
         try {
             purchaseService.deletePurchase(id);

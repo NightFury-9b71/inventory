@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { QrCode, Camera, Search, Package, MapPin, Calendar, Clock, AlertCircle } from 'lucide-react';
+import { 
+  QrCode, Camera, Search, Package, MapPin, Calendar, Clock, AlertCircle,
+  DollarSign, FileText, User, Building2, Truck, Tag, FolderOpen, ShoppingCart
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -116,77 +119,214 @@ export default function BarcodePage() {
       )}
 
       {itemInstance && (
-        <Card className="p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <Package className="h-8 w-8 text-blue-600" />
-            <div>
-              <h3 className="text-2xl font-bold text-slate-900">Item Found</h3>
-              <p className="text-slate-600">Barcode: {itemInstance.barcode}</p>
+        <div className="space-y-6">
+          {/* Header Card */}
+          <Card className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Package className="h-8 w-8 text-blue-600" />
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold text-slate-900">{itemInstance.itemName}</h3>
+                <p className="text-slate-600">Barcode: {itemInstance.barcode}</p>
+              </div>
+              <Badge className={getStatusColor(itemInstance.status)}>
+                {itemInstance.status.replace('_', ' ')}
+              </Badge>
             </div>
-          </div>
+          </Card>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-4">
+          {/* Item Information */}
+          <Card className="p-6">
+            <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <Tag className="h-5 w-5" />
+              Item Information
+            </h4>
+            <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="text-sm font-medium text-gray-500">Item Name</label>
-                <p className="text-lg font-semibold">{itemInstance.itemName}</p>
+                <label className="text-sm font-medium text-gray-500">Item Code</label>
+                <p className="text-base font-mono">{itemInstance.itemCode || 'N/A'}</p>
               </div>
-
               <div>
-                <label className="text-sm font-medium text-gray-500">Unit Price</label>
-                <p className="text-lg">${itemInstance.unitPrice.toFixed(2)}</p>
+                <label className="text-sm font-medium text-gray-500">Category</label>
+                <p className="text-base">{itemInstance.categoryName || 'N/A'}</p>
               </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-500">Current Status</label>
-                <div className="mt-1">
-                  <Badge className={getStatusColor(itemInstance.status)}>
-                    {itemInstance.status.replace('_', ' ')}
-                  </Badge>
+              {itemInstance.itemDescription && (
+                <div className="md:col-span-2">
+                  <label className="text-sm font-medium text-gray-500">Description</label>
+                  <p className="text-base text-slate-700">{itemInstance.itemDescription}</p>
                 </div>
+              )}
+            </div>
+          </Card>
+
+          {/* Purchase Information */}
+          <Card className="p-6">
+            <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5" />
+              Purchase Information
+            </h4>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                  <DollarSign className="h-4 w-4" />
+                  Unit Price
+                </label>
+                <p className="text-lg font-semibold text-green-600">
+                  ${itemInstance.unitPrice.toFixed(2)}
+                </p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  Purchase Date
+                </label>
+                <p className="text-base">
+                  {itemInstance.purchaseDate 
+                    ? new Date(itemInstance.purchaseDate).toLocaleDateString()
+                    : itemInstance.createdAt 
+                    ? new Date(itemInstance.createdAt).toLocaleDateString()
+                    : 'N/A'}
+                </p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                  <Truck className="h-4 w-4" />
+                  Vendor
+                </label>
+                <p className="text-base">{itemInstance.vendorName || 'N/A'}</p>
+                {itemInstance.vendorContact && (
+                  <p className="text-sm text-slate-600">{itemInstance.vendorContact}</p>
+                )}
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Invoice Number
+                </label>
+                <p className="text-base font-mono">{itemInstance.invoiceNumber || 'N/A'}</p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  Purchased By
+                </label>
+                <p className="text-base">{itemInstance.purchasedByName || 'N/A'}</p>
               </div>
             </div>
+          </Card>
 
-            <div className="space-y-4">
+          {/* Current Status & Location */}
+          <Card className="p-6">
+            <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Current Status & Location
+            </h4>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="text-sm font-medium text-gray-500">Current Owner</label>
+                <p className="text-base font-semibold">
+                  {itemInstance.ownerName || 'Unassigned'}
+                </p>
+              </div>
               {itemInstance.distributedToOfficeName && (
                 <div>
                   <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                    <MapPin className="h-4 w-4" />
+                    <Building2 className="h-4 w-4" />
                     Current Location
                   </label>
-                  <p className="text-lg font-semibold">{itemInstance.distributedToOfficeName}</p>
+                  <p className="text-base font-semibold">
+                    {itemInstance.distributedToOfficeName}
+                  </p>
                 </div>
               )}
-
               {itemInstance.distributedAt && (
                 <div>
                   <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
+                    <Clock className="h-4 w-4" />
                     Distributed Date
                   </label>
-                  <p className="text-lg">{new Date(itemInstance.distributedAt).toLocaleDateString()}</p>
-                </div>
-              )}
-
-              {itemInstance.createdAt && (
-                <div>
-                  <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Purchase Date
-                  </label>
-                  <p className="text-lg">{new Date(itemInstance.createdAt).toLocaleDateString()}</p>
+                  <p className="text-base">
+                    {new Date(itemInstance.distributedAt).toLocaleDateString()}
+                  </p>
                 </div>
               )}
             </div>
-          </div>
+          </Card>
 
+          {/* Additional Details */}
           {itemInstance.remarks && (
-            <div className="mt-6 pt-6 border-t">
-              <label className="text-sm font-medium text-gray-500">Remarks</label>
-              <p className="text-slate-700 mt-1">{itemInstance.remarks}</p>
-            </div>
+            <Card className="p-6">
+              <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Remarks
+              </h4>
+              <p className="text-slate-700 whitespace-pre-line">{itemInstance.remarks}</p>
+            </Card>
           )}
-        </Card>
+
+          {/* Timeline */}
+          <Card className="p-6">
+            <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              Timeline
+            </h4>
+            <div className="space-y-3">
+              {itemInstance.createdAt && (
+                <div className="flex items-center gap-3 p-3 bg-slate-50 rounded">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Item Registered</p>
+                    <p className="text-xs text-slate-600">
+                      {new Date(itemInstance.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {itemInstance.distributedAt && (
+                <div className="flex items-center gap-3 p-3 bg-slate-50 rounded">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Distributed to {itemInstance.distributedToOfficeName}</p>
+                    <p className="text-xs text-slate-600">
+                      {new Date(itemInstance.distributedAt).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {itemInstance.updatedAt && itemInstance.updatedAt !== itemInstance.createdAt && (
+                <div className="flex items-center gap-3 p-3 bg-slate-50 rounded">
+                  <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Last Updated</p>
+                    <p className="text-xs text-slate-600">
+                      {new Date(itemInstance.updatedAt).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card className="p-6">
+            <h4 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h4>
+            <div className="flex flex-wrap gap-3">
+              <Button 
+                variant="outline"
+                onClick={() => window.open(`/purchases/${itemInstance.purchaseId}`, '_blank')}
+              >
+                <FolderOpen className="h-4 w-4 mr-2" />
+                View Purchase Details
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => window.open(`/items/${itemInstance.itemId}`, '_blank')}
+              >
+                <Package className="h-4 w-4 mr-2" />
+                View Item Details
+              </Button>
+            </div>
+          </Card>
+        </div>
       )}
 
       <Card className="p-12 text-center">

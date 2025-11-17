@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import Can from "@/components/auth/Can";
 
 export default function DistributionsPage() {
   const router = useRouter();
@@ -118,10 +119,12 @@ export default function DistributionsPage() {
         <PageTitle title="Distribution Management" totalCount={totalCount} />
         <PageSubtitle subtitle="Track and manage item distributions to offices and departments" />
         <PageToolbar>
-          <Button onClick={() => router.push('/distributions/new')} className="mr-4">
-            <Plus className="h-4 w-4 mr-2" />
-            Distribute Item
-          </Button>
+          <Can page="/distributions" action="create">
+            <Button onClick={() => router.push('/distributions/new')} className="mr-4">
+              <Plus className="h-4 w-4 mr-2" />
+              Distribute Item
+            </Button>
+          </Can>
           <PageSearch
             searchTerm={searchTerm}
             setSearchTerm={handleSearch}
@@ -156,10 +159,12 @@ export default function DistributionsPage() {
             <Truck className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No distributions found</h3>
             <p className="text-gray-600 mb-4">Start by distributing items to offices.</p>
-            <Button onClick={() => router.push('/distributions/new')}>
-              <Plus className="h-4 w-4 mr-2" />
-              Create First Distribution
-            </Button>
+            <Can page="/distributions" action="create">
+              <Button onClick={() => router.push('/distributions/new')}>
+                <Plus className="h-4 w-4 mr-2" />
+                Create First Distribution
+              </Button>
+            </Can>
           </div>
         ) : (
           <Table

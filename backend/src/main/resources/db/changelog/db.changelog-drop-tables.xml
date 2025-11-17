@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="drop-all-tables" author="system">
+        <comment>Drop all existing tables for fresh database setup</comment>
+
+        <!-- Use SQL to conditionally drop tables -->
+        <sql>
+            SET FOREIGN_KEY_CHECKS = 0;
+            DROP TABLE IF EXISTS item_movements;
+            DROP TABLE IF EXISTS item_distributions;
+            DROP TABLE IF EXISTS office_inventory;
+            DROP TABLE IF EXISTS item_instances;
+            DROP TABLE IF EXISTS purchase_items;
+            DROP TABLE IF EXISTS purchases;
+            DROP TABLE IF EXISTS items;
+            DROP TABLE IF EXISTS item_categories;
+            DROP TABLE IF EXISTS units;
+            DROP TABLE IF EXISTS designations;
+            DROP TABLE IF EXISTS users;
+            DROP TABLE IF EXISTS roles;
+            DROP TABLE IF EXISTS offices;
+            DROP TABLE IF EXISTS employees;
+            SET FOREIGN_KEY_CHECKS = 1;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

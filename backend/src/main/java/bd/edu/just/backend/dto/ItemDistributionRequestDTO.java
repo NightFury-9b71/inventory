@@ -1,5 +1,7 @@
 package bd.edu.just.backend.dto;
 
+import bd.edu.just.backend.model.DistributionStatus;
+
 public class ItemDistributionRequestDTO {
 
     private Long itemId;
@@ -8,17 +10,19 @@ public class ItemDistributionRequestDTO {
     private Integer quantity;
     private String dateDistributed; // Changed to String
     private String remarks;
+    private DistributionStatus status;
 
     public ItemDistributionRequestDTO() {}
 
     public ItemDistributionRequestDTO(Long itemId, Long officeId, Long userId, Integer quantity,
-                                     String dateDistributed, String remarks) {
+                                     String dateDistributed, String remarks, DistributionStatus status) {
         this.itemId = itemId;
         this.officeId = officeId;
         this.userId = userId;
         this.quantity = quantity;
         this.dateDistributed = dateDistributed;
         this.remarks = remarks;
+        this.status = status;
     }
 
     // Getters and Setters
@@ -68,5 +72,13 @@ public class ItemDistributionRequestDTO {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public DistributionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DistributionStatus status) {
+        this.status = status;
     }
 }

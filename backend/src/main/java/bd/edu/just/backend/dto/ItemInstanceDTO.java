@@ -1,11 +1,15 @@
 package bd.edu.just.backend.dto;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class ItemInstanceDTO {
     private Long id;
     private Long itemId;
     private String itemName;
+    private String itemCode;
+    private String itemDescription;
+    private String categoryName;
     private Long purchaseId;
     private String barcode;
     private Double unitPrice;
@@ -18,6 +22,13 @@ public class ItemInstanceDTO {
     private String remarks;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    
+    // Purchase details
+    private String vendorName;
+    private String vendorContact;
+    private LocalDate purchaseDate;
+    private String invoiceNumber;
+    private String purchasedByName;
 
     public ItemInstanceDTO() {}
 
@@ -140,5 +151,69 @@ public class ItemInstanceDTO {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public String getItemDescription() {
+        return itemDescription;
+    }
+
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public String getVendorContact() {
+        return vendorContact;
+    }
+
+    public void setVendorContact(String vendorContact) {
+        this.vendorContact = vendorContact;
+    }
+
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
+    public String getPurchasedByName() {
+        return purchasedByName;
+    }
+
+    public void setPurchasedByName(String purchasedByName) {
+        this.purchasedByName = purchasedByName;
     }
 }

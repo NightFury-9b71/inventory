@@ -4,6 +4,7 @@ import bd.edu.just.backend.model.ItemDistribution;
 import bd.edu.just.backend.model.Item;
 import bd.edu.just.backend.model.Office;
 import bd.edu.just.backend.model.User;
+import bd.edu.just.backend.model.DistributionStatus;
 import bd.edu.just.backend.dto.ItemDistributionDTO;
 import bd.edu.just.backend.dto.ItemDistributionRequestDTO;
 import bd.edu.just.backend.repository.ItemDistributionRepository;
@@ -33,6 +34,9 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OfficeInventoryService officeInventoryService;
 
     @Override
     public List<ItemDistributionDTO> getAllDistributions() {
@@ -95,6 +99,9 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
         ItemDistribution distribution = distributionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Distribution not found"));
 
+        DistributionStatus oldStatus = distribution.getStatus();
+        DistributionStatus newStatus = requestDTO.getStatus() != null ? requestDTO.getStatus() : distribution.getStatus();
+
         // Restore previous quantity to item
         Item item = distribution.getItem();
         item.setQuantity(item.getQuantity() + distribution.getQuantity());
@@ -137,6 +144,9 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
         if (requestDTO.getRemarks() != null) {
             distribution.setRemarks(requestDTO.getRemarks());
         }
+        if (requestDTO.getStatus() != null) {
+            distribution.setStatus(requestDTO.getStatus());
+        }
 
         // Check if item has sufficient quantity for the new quantity
         if (item.getQuantity() < newQuantity) {
@@ -148,6 +158,20 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
         itemRepository.save(item);
 
         ItemDistribution savedDistribution = distributionRepository.save(distribution);
+
+        // Handle office inventory based on status change
+        if (oldStatus != DistributionStatus.APPROVED && newStatus == DistributionStatus.APPROVED) {
+            // Status changed to APPROVED, add to office inventory
+            officeInventoryService.adjustInventory(distribution.getOffice(), item, newQuantity);
+        } else if (oldStatus == DistributionStatus.APPROVED && newStatus != DistributionStatus.APPROVED) {
+            // Status changed from APPROVED to something else, remove from office inventory
+            officeInventoryService.adjustInventory(distribution.getOffice(), item, -newQuantity);
+        } else if (oldStatus == DistributionStatus.APPROVED && newStatus == DistributionStatus.APPROVED && !newQuantity.equals(distribution.getQuantity())) {
+            // Quantity changed while still APPROVED, adjust inventory difference
+            int quantityDifference = newQuantity - distribution.getQuantity();
+            officeInventoryService.adjustInventory(distribution.getOffice(), item, quantityDifference);
+        }
+
         return convertToDTO(savedDistribution);
     }
 

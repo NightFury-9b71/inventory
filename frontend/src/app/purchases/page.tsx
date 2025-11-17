@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Can from "@/components/auth/Can";
 
 export default function PurchaseTablePage() {
   const router = useRouter();
@@ -116,10 +117,12 @@ export default function PurchaseTablePage() {
         <PageTitle title="Purchase Management" totalCount={totalCount} />
         <PageSubtitle subtitle="Manage all item purchases and their records" />
         <PageToolbar>
-          <Button onClick={() => router.push('/purchases/new')} className="mr-4">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Purchase
-          </Button>
+          <Can page="/purchases" action="create">
+            <Button onClick={() => router.push('/purchases/new')} className="mr-4">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Purchase
+            </Button>
+          </Can>
           <PageSearch
             searchTerm={searchTerm}
             setSearchTerm={handleSearch}

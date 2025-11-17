@@ -14,6 +14,9 @@ export interface ItemInstance {
   id: number;
   itemId: number;
   itemName?: string;
+  itemCode?: string;
+  itemDescription?: string;
+  categoryName?: string;
   purchaseId: number;
   barcode: string;
   unitPrice: number;
@@ -26,6 +29,12 @@ export interface ItemInstance {
   remarks?: string;
   createdAt?: string;
   updatedAt?: string;
+  // Purchase details
+  vendorName?: string;
+  vendorContact?: string;
+  purchaseDate?: string;
+  invoiceNumber?: string;
+  purchasedByName?: string;
 }
 
 export interface Purchase {

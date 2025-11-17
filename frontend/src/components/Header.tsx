@@ -1,19 +1,37 @@
 'use client';
 
-import React from 'react';
-import { Bell, Search, User, ChevronDown, LogOut, Settings as SettingsIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Bell, ScanLine, User, ChevronDown, LogOut, Settings as SettingsIcon, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const { user, logout } = useAuth();
+  const router = useRouter();
+  const [barcode, setBarcode] = useState('');
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleBarcodeSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (barcode.trim()) {
+      // Navigate to item tracking page with barcode
+      router.push(`/items/track?barcode=${encodeURIComponent(barcode.trim())}`);
+      setBarcode('');
+    }
+  };
+
+  const handleBarcodeKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleBarcodeSearch(e);
+    }
   };
 
   // Get user initials for avatar
@@ -36,14 +54,27 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Search */}
-        <div className="relative hidden sm:block">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+        {/* Barcode Scanner Search */}
+        <form onSubmit={handleBarcodeSearch} className="relative hidden sm:block">
+          <ScanLine className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
-            placeholder="Search..."
-            className="pl-10 w-64"
+            type="text"
+            placeholder="Scan barcode or enter item code..."
+            value={barcode}
+            onChange={(e) => setBarcode(e.target.value)}
+            onKeyPress={handleBarcodeKeyPress}
+            className="pl-10 w-80"
+            autoComplete="off"
           />
-        </div>
+          <Button
+            type="submit"
+            size="sm"
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 px-2"
+            disabled={!barcode.trim()}
+          >
+            <Search className="h-3 w-3" />
+          </Button>
+        </form>
 
         {/* User Menu */}
         <DropdownMenu>
