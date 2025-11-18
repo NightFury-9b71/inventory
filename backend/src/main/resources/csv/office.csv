@@ -1,92 +1,92 @@
 id,name,name_bn,type,parent_id,code,description,order,is_active
-1,Chancellor Office,চ্যান্সেলর অফিস,office,,CHAN,Chancellor's Office,1,TRUE
-2,Vice Chancellor Office,উপাচার্য অফিস,office,,VC,Vice Chancellor's Office and Administrative Wing,2,TRUE
-3,Pro Vice Chancellor Office,সহ-উপাচার্য অফিস,office,,PVC,Pro Vice Chancellor's Office,3,TRUE
-4,Treasurer Office,কোষাধ্যক্ষ অফিস,office,,TREAS,Treasurer's Office,4,TRUE
-5,Faculty of Engineering & Technology,প্রকৌশল ও প্রযুক্তি অনুষদ,faculty,,FET,Faculty of Engineering and Technology,5,TRUE
-6,Department of Chemical Engineering,রাসায়নিক প্রকৌশল বিভাগ,department,5,ChE,Chemical Engineering Department,6,TRUE
-7,Department of Industrial & Production Engineering,শিল্প ও উৎপাদন প্রকৌশল বিভাগ,department,5,IPE,Industrial and Production Engineering Department,7,TRUE
-8,Department of Petroleum & Mining Engineering,পেট্রোলিয়াম ও খনন প্রকৌশল বিভাগ,department,5,PME,Petroleum and Mining Engineering Department,8,TRUE
-9,Department of Electrical & Electronic Engineering,বৈদ্যুতিক ও ইলেকট্রনিক প্রকৌশল বিভাগ,department,5,EEE,Electrical and Electronic Engineering Department,9,TRUE
-10,Department of Textile Engineering,টেক্সটাইল প্রকৌশল বিভাগ,department,5,TE,Textile Engineering Department,10,TRUE
-11,Department of Bio-Medical Engineering,বায়ো-মেডিকেল প্রকৌশল বিভাগ,department,5,BME,Bio-Medical Engineering Department,11,TRUE
-12,Department of Mechatronics Engineering,মেকাট্রনিক্স প্রকৌশল বিভাগ,department,5,ME,Mechatronics Engineering Department,12,TRUE
-13,Faculty of Computing & Information Engineering,কম্পিউটিং ও তথ্য প্রকৌশল অনুষদ,faculty,,FCIE,Faculty of Computing and Information Engineering,13,TRUE
-14,Department of Computer Science & Engineering,কম্পিউটার বিজ্ঞান ও প্রকৌশল বিভাগ,department,13,CSE,Computer Science and Engineering Department,14,TRUE
-15,Department of Software Engineering,সফটওয়্যার প্রকৌশল বিভাগ,department,13,SE,Software Engineering Department,15,TRUE
-16,Department of Computational Biology,কম্পিউটেশনাল জীববিজ্ঞান বিভাগ,department,13,CB,Computational Biology Department,16,TRUE
-17,Faculty of Biological Science & Technology,জৈবিক বিজ্ঞান ও প্রযুক্তি অনুষদ,faculty,,FBST,Faculty of Biological Science and Technology,17,TRUE
-18,Department of Microbiology,অণুজীববিজ্ঞান বিভাগ,department,17,MB,Microbiology Department,18,TRUE
-19,Department of Fisheries & Marine Bio-science,মৎস্যবিজ্ঞান ও সামুদ্রিক জীববিজ্ঞান বিভাগ,department,17,FMB,Fisheries and Marine Bio-science Department,19,TRUE
-20,Department of Genetic Engineering & Biotechnology,জেনেটিক ইঞ্জিনিয়ারিং ও বায়োটেকনোলজি বিভাগ,department,17,GEB,Genetic Engineering and Biotechnology Department,20,TRUE
-21,Department of Pharmacy,ফার্মেসি বিভাগ,department,17,PHAR,Pharmacy Department,21,TRUE
-22,Department of Biochemistry & Molecular Biology,জৈব রসায়ন ও আণবিক জীববিজ্ঞান বিভাগ,department,17,BMB,Biochemistry and Molecular Biology Department,22,TRUE
-23,Faculty of Health Science,স্বাস্থ্য বিজ্ঞান অনুষদ,faculty,,FHS,Faculty of Health Science,23,TRUE
-24,Department of Physical Education Sports Science,শারীরিক শিক্ষা ও ক্রীড়া বিজ্ঞান বিভাগ,department,23,PESS,Physical Education and Sports Science Department,24,TRUE
-25,Department of Nursing & Health Science,নার্সিং ও স্বাস্থ্য বিজ্ঞান বিভাগ,department,23,NHS,Nursing and Health Science Department,25,TRUE
-26,Department of Physiotherapy and Rehabilitation,ফিজিওথেরাপি ও পুনর্বাসন বিভাগ,department,23,PTR,Physiotherapy and Rehabilitation Department,26,TRUE
-27,Department of Public Health,জনস্বাস্থ্য বিভাগ,department,23,PH,Public Health Department,27,TRUE
-28,Faculty of Science,বিজ্ঞান অনুষদ,faculty,,FS,Faculty of Science,28,TRUE
-29,Department of Physics,পদার্থবিজ্ঞান বিভাগ,department,28,PHY,Physics Department,29,TRUE
-30,Department of Mathematics,গণিত বিভাগ,department,28,MATH,Mathematics Department,30,TRUE
-31,Department of Chemistry,রসায়ন বিভাগ,department,28,CHEM,Chemistry Department,31,TRUE
-32,Department of Climate and Disaster Management,জলবায়ু ও দুর্যোগ ব্যবস্থাপনা বিভাগ,department,28,CDM,Climate and Disaster Management Department,32,TRUE
-33,Faculty of Applied Science & Technology,ফলিত বিজ্ঞান ও প্রযুক্তি অনুষদ,faculty,,FAST,Faculty of Applied Science and Technology,33,TRUE
-34,Department of Environmental Science and Technology,পরিবেশবিজ্ঞান ও প্রযুক্তি বিভাগ,department,33,EST,Environmental Science and Technology Department,34,TRUE
-35,Department of Nutrition & Food Technology,পুষ্টি ও খাদ্য প্রযুক্তি বিভাগ,department,33,NFT,Nutrition and Food Technology Department,35,TRUE
-36,Department of Applied Statistics,ফলিত পরিসংখ্যান বিভাগ,department,33,AS,Applied Statistics Department,36,TRUE
-37,Department of Food Safety Management,খাদ্য নিরাপত্তা ব্যবস্থাপনা বিভাগ,department,33,FSM,Food Safety Management Department,37,TRUE
-38,Department of Clinical Nutrition & Dietetics,ক্লিনিক্যাল নিউট্রিশন ও ডায়েটেটিক্স বিভাগ,department,33,CND,Clinical Nutrition and Dietetics Department,38,TRUE
-39,Faculty of Agricultural Science & Technology,কৃষি বিজ্ঞান ও প্রযুক্তি অনুষদ,faculty,,FAST-AG,Faculty of Agricultural Science and Technology,39,TRUE
-40,Department of Agro Product Processing Technology,কৃষি পণ্য প্রক্রিয়াকরণ প্রযুক্তি বিভাগ,department,39,APPT,Agro Product Processing Technology Department,40,TRUE
-41,Department of Veterinary & Animal Sciences,পশুচিকিৎসা ও প্রাণিবিজ্ঞান বিভাগ,department,39,VAS,Veterinary and Animal Sciences Department,41,TRUE
-42,Department of Agricultural Engineering,কৃষি প্রকৌশল বিভাগ,department,39,AE,Agricultural Engineering Department,42,TRUE
-43,Department of Agricultural Economics & Marketing Policy,কৃষি অর্থনীতি ও বিপণন নীতি বিভাগ,department,39,AEMP,Agricultural Economics and Marketing Policy Department,43,TRUE
-44,Department of Crop Science,ফসল বিজ্ঞান বিভাগ,department,39,CS,Crop Science Department,44,TRUE
-45,Faculty of Business Studies,ব্যবসায় শিক্ষা অনুষদ,faculty,,FBS,Faculty of Business Studies,45,TRUE
-46,Department of Accounting & Information System,হিসাববিজ্ঞান ও তথ্য ব্যবস্থা বিভাগ,department,45,AIS,Accounting and Information System Department,46,TRUE
-47,Department of Management,ব্যবস্থাপনা বিভাগ,department,45,MGT,Management Department,47,TRUE
-48,Department of Finance & Banking,অর্থ ও ব্যাংকিং বিভাগ,department,45,FB,Finance and Banking Department,48,TRUE
-49,Department of Marketing,বিপণন বিভাগ,department,45,MKT,Marketing Department,49,TRUE
-50,Faculty of Arts & Social Science,কলা ও সমাজবিজ্ঞান অনুষদ,faculty,,FASS,Faculty of Arts and Social Science,50,TRUE
-51,Department of English,ইংরেজি বিভাগ,department,50,ENG,English Department,51,TRUE
-52,Department of Humanities,মানবিক বিভাগ,department,50,HUM,Humanities Department (Non Degree),52,TRUE
-53,Office of the Registrar,রেজিস্ট্রার অফিস,office,2,REG,Registrar's Office and Administrative Sections,53,TRUE
-54,Office of the Librarian,গ্রন্থাগারিক অফিস,office,2,LIB,Central Library,54,TRUE
-55,Office of the Controller of Examinations,পরীক্ষা নিয়ন্ত্রক অফিস,office,2,COE,Controller of Examinations Office,55,TRUE
-56,Office of the Chief Engineer,প্রধান প্রকৌশলী অফিস,office,2,CE,Chief Engineer's Office,56,TRUE
-57,Office of the Chief Medical Officer,প্রধান চিকিৎসা কর্মকর্তা অফিস,office,2,CMO,Chief Medical Officer and Medical Center,57,TRUE
-58,Office of the Director (Account),পরিচালক (হিসাব) অফিস,office,2,DA,Director of Accounts Office,58,TRUE
-59,Office of the Director (Planning Development & Works),পরিচালক (পরিকল্পনা উন্নয়ন ও কার্য) অফিস,office,2,PDW,Planning Development and Works Office,59,TRUE
-60,Office of the Director (Physical Education),পরিচালক (শারীরিক শিক্ষা) অফিস,office,2,DPE,Director of Physical Education Office,60,TRUE
-61,Proctors Office,প্রক্টর অফিস,office,2,PROC,Proctor's Office,61,TRUE
-62,Office of the Transport Administrator,পরিবহন প্রশাসক অফিস,office,2,TRANS,Transport Administration Office,62,TRUE
-63,Audit Cell,নিরীক্ষা সেল,office,2,AUDIT,Internal Audit Cell,63,TRUE
-64,International Service Centre,আন্তর্জাতিক সেবা কেন্দ্র,office,3,ISC,International Service Centre,64,TRUE
-65,Technology Transfer Office,প্রযুক্তি স্থানান্তর অফিস,office,3,TTO,Technology Transfer Office,65,TRUE
-66,Guest House (Dhaka & Jashore),গেস্ট হাউস (ঢাকা ও যশোর),facility,2,GH,Guest Houses,66,TRUE
-67,Shaheed Mashiur Rahman Hall,শহীদ মশিউর রহমান হল,hall,,SMR-HALL,Male Residential Hall,67,TRUE
-68,Sheikh Hasina Chitree Hall,শেখ হাসিনা চিত্রী হল,hall,,SHC-HALL,Female Residential Hall,68,TRUE
-69,Munshi Mohammad Meherullah Hall,মুন্সী মোহাম্মদ মেহেরউল্লাহ হল,hall,,MMM-HALL,Male Residential Hall,69,TRUE
-70,Birprotik Taramon Bibi Hall,বীরপ্রতীক তারামন বিবি হল,hall,,BTB-HALL,Female Residential Hall,70,TRUE
-71,Dr. M.A. Wazed Miah Institute of Advance Studies,ড. এম.এ. ওয়াজেদ মিয়া উন্নত অধ্যয়ন ইনস্টিটিউট,institute,,MAWMIAS,Research Institute,71,TRUE
-72,Office of the Director of Institutional Quality Assurance Cell,প্রাতিষ্ঠানিক মান নিশ্চিতকরণ সেল পরিচালক অফিস,office,2,IQAC,Quality Assurance Cell,72,TRUE
-73,Center for Sophisticated Instrumentation & Research Lab,অত্যাধুনিক যন্ত্রপাতি ও গবেষণা ল্যাব কেন্দ্র,center,,CSIRL,Research Center,73,TRUE
-74,Center for Disability Rehabilitation & Research,প্রতিবন্ধী পুনর্বাসন ও গবেষণা কেন্দ্র,center,,CDRR,Research Center,74,TRUE
-75,Office of the Genome Center,জিনোম কেন্দ্র অফিস,center,,GC,Genome Research Center,75,TRUE
-76,Office of the Incubation Center,ইনকিউবেশন কেন্দ্র অফিস,center,,IC,Incubation Center,76,TRUE
-77,ICT Cell,আইসিটি সেল,office,2,ICT,Information and Communication Technology Cell,77,TRUE
-78,TSC,শিক্ষক-ছাত্র কেন্দ্র,facility,,TSC,Teacher Student Center,78,TRUE
-79,Day care Centre,ডে কেয়ার সেন্টার,facility,,DCC,Day Care Center,79,TRUE
-80,Institute of Entrepreneurship,উদ্যোক্তা ইনস্টিটিউট,institute,,IOE,Entrepreneurship Institute,80,TRUE
-81,Institute of Intellectual Property Rights and Technology Management,বুদ্ধিবৃত্তিক সম্পদ অধিকার ও প্রযুক্তি ব্যবস্থাপনা ইনস্টিটিউট,institute,,IIPRTM,IP Rights and Technology Management Institute,81,TRUE
-82,Horticulture research Institute,উদ্যানতত্ত্ব গবেষণা ইনস্টিটিউট,institute,,HRI,Horticulture Research Institute,82,TRUE
-83,Preventative medicine & Vaccine research Institute,প্রতিরোধক চিকিৎসা ও ভ্যাকসিন গবেষণা ইনস্টিটিউট,institute,,PMVRI,Preventative Medicine and Vaccine Research Institute,83,TRUE
-84,Bio-fuel & renewable energy research Institute,জৈব জ্বালানি ও নবায়নযোগ্য শক্তি গবেষণা ইনস্টিটিউট,institute,,BRERI,Bio-fuel and Renewable Energy Research Institute,84,TRUE
-85,Material Science research Institute,পদার্থ বিজ্ঞান গবেষণা ইনস্টিটিউট,institute,,MSRI,Material Science Research Institute,85,TRUE
-86,Brood Fish Management Fish Hatchery and Wet-lab,ব্রুড মাছ ব্যবস্থাপনা মাছের হ্যাচারি ও ওয়েট-ল্যাব,facility,,BFM,Fish Hatchery and Research Facility,86,TRUE
-87,Office of the Director of Students Counseling & Guidance,শিক্ষার্থী পরামর্শ ও নির্দেশনা পরিচালক অফিস,office,2,SCG,Student Counseling and Guidance Office,87,TRUE
-88,Sheikh Rasel Gymnasium,শেখ রাসেল জিমনেসিয়াম,facility,,SRG,Gymnasium Facility,88,TRUE
-89,Central Mosque (I),কেন্দ্রীয় মসজিদ (১),facility,,CM1,Main Central Mosque,89,TRUE
-90,Central Mosque (II),কেন্দ্রীয় মসজিদ (২),facility,,CM2,Secondary Central Mosque,90,TRUE
-91,Temple (Mandir),মন্দির,facility,,TEMPLE,Hindu Temple Facility,91,TRUE
+1,Chancellor Office,চ্যান্সেলর অফিস,office,,CHAN,Chancellor's Office,10,True
+2,Vice Chancellor Office,উপাচার্য অফিস,office,,VC,Vice Chancellor's Office and Administrative Wing,20,True
+3,Pro Vice Chancellor Office,সহ-উপাচার্য অফিস,office,,PVC,Pro Vice Chancellor's Office,30,True
+4,Treasurer Office,কোষাধ্যক্ষ অফিস,office,,TREAS,Treasurer's Office,40,True
+5,Faculty of Engineering & Technology,প্রকৌশল ও প্রযুক্তি অনুষদ,faculty,,FET,Faculty of Engineering and Technology,50,True
+6,Department of Chemical Engineering,রাসায়নিক প্রকৌশল বিভাগ,department,5,ChE,Chemical Engineering Department,60,True
+7,Department of Industrial & Production Engineering,শিল্প ও উৎপাদন প্রকৌশল বিভাগ,department,5,IPE,Industrial and Production Engineering Department,70,True
+8,Department of Petroleum & Mining Engineering,পেট্রোলিয়াম ও খনন প্রকৌশল বিভাগ,department,5,PME,Petroleum and Mining Engineering Department,80,True
+9,Department of Electrical & Electronic Engineering,বৈদ্যুতিক ও ইলেকট্রনিক প্রকৌশল বিভাগ,department,5,EEE,Electrical and Electronic Engineering Department,90,True
+10,Department of Textile Engineering,টেক্সটাইল প্রকৌশল বিভাগ,department,5,TE,Textile Engineering Department,100,True
+11,Department of Bio-Medical Engineering,বায়ো-মেডিকেল প্রকৌশল বিভাগ,department,5,BME,Bio-Medical Engineering Department,110,True
+12,Department of Mechatronics Engineering,মেকাট্রনিক্স প্রকৌশল বিভাগ,department,5,ME,Mechatronics Engineering Department,120,True
+13,Faculty of Computing & Information Engineering,কম্পিউটিং ও তথ্য প্রকৌশল অনুষদ,faculty,,FCIE,Faculty of Computing and Information Engineering,130,True
+14,Department of Computer Science & Engineering,কম্পিউটার বিজ্ঞান ও প্রকৌশল বিভাগ,department,13,CSE,Computer Science and Engineering Department,140,True
+15,Department of Software Engineering,সফটওয়্যার প্রকৌশল বিভাগ,department,13,SE,Software Engineering Department,150,True
+16,Department of Computational Biology,কম্পিউটেশনাল জীববিজ্ঞান বিভাগ,department,13,CB,Computational Biology Department,160,True
+17,Faculty of Biological Science & Technology,জৈবিক বিজ্ঞান ও প্রযুক্তি অনুষদ,faculty,,FBST,Faculty of Biological Science and Technology,170,True
+18,Department of Microbiology,অণুজীববিজ্ঞান বিভাগ,department,17,MB,Microbiology Department,180,True
+19,Department of Fisheries & Marine Bio-science,মৎস্যবিজ্ঞান ও সামুদ্রিক জীববিজ্ঞান বিভাগ,department,17,FMB,Fisheries and Marine Bio-science Department,190,True
+20,Department of Genetic Engineering & Biotechnology,জেনেটিক ইঞ্জিনিয়ারিং ও বায়োটেকনোলজি বিভাগ,department,17,GEB,Genetic Engineering and Biotechnology Department,200,True
+21,Department of Pharmacy,ফার্মেসি বিভাগ,department,17,PHAR,Pharmacy Department,210,True
+22,Department of Biochemistry & Molecular Biology,জৈব রসায়ন ও আণবিক জীববিজ্ঞান বিভাগ,department,17,BMB,Biochemistry and Molecular Biology Department,220,True
+23,Faculty of Health Science,স্বাস্থ্য বিজ্ঞান অনুষদ,faculty,,FHS,Faculty of Health Science,230,True
+24,Department of Physical Education Sports Science,শারীরিক শিক্ষা ও ক্রীড়া বিজ্ঞান বিভাগ,department,23,PESS,Physical Education and Sports Science Department,240,True
+25,Department of Nursing & Health Science,নার্সিং ও স্বাস্থ্য বিজ্ঞান বিভাগ,department,23,NHS,Nursing and Health Science Department,250,True
+26,Department of Physiotherapy and Rehabilitation,ফিজিওথেরাপি ও পুনর্বাসন বিভাগ,department,23,PTR,Physiotherapy and Rehabilitation Department,260,True
+27,Department of Public Health,জনস্বাস্থ্য বিভাগ,department,23,PH,Public Health Department,270,True
+28,Faculty of Science,বিজ্ঞান অনুষদ,faculty,,FS,Faculty of Science,280,True
+29,Department of Physics,পদার্থবিজ্ঞান বিভাগ,department,28,PHY,Physics Department,290,True
+30,Department of Mathematics,গণিত বিভাগ,department,28,MATH,Mathematics Department,300,True
+31,Department of Chemistry,রসায়ন বিভাগ,department,28,CHEM,Chemistry Department,310,True
+32,Department of Climate and Disaster Management,জলবায়ু ও দুর্যোগ ব্যবস্থাপনা বিভাগ,department,28,CDM,Climate and Disaster Management Department,320,True
+33,Faculty of Applied Science & Technology,ফলিত বিজ্ঞান ও প্রযুক্তি অনুষদ,faculty,,FAST,Faculty of Applied Science and Technology,330,True
+34,Department of Environmental Science and Technology,পরিবেশবিজ্ঞান ও প্রযুক্তি বিভাগ,department,33,EST,Environmental Science and Technology Department,340,True
+35,Department of Nutrition & Food Technology,পুষ্টি ও খাদ্য প্রযুক্তি বিভাগ,department,33,NFT,Nutrition and Food Technology Department,350,True
+36,Department of Applied Statistics,ফলিত পরিসংখ্যান বিভাগ,department,33,AS,Applied Statistics Department,360,True
+37,Department of Food Safety Management,খাদ্য নিরাপত্তা ব্যবস্থাপনা বিভাগ,department,33,FSM,Food Safety Management Department,370,True
+38,Department of Clinical Nutrition & Dietetics,ক্লিনিক্যাল নিউট্রিশন ও ডায়েটেটিক্স বিভাগ,department,33,CND,Clinical Nutrition and Dietetics Department,380,True
+39,Faculty of Agricultural Science & Technology,কৃষি বিজ্ঞান ও প্রযুক্তি অনুষদ,faculty,,FAST-AG,Faculty of Agricultural Science and Technology,390,True
+40,Department of Agro Product Processing Technology,কৃষি পণ্য প্রক্রিয়াকরণ প্রযুক্তি বিভাগ,department,39,APPT,Agro Product Processing Technology Department,400,True
+41,Department of Veterinary & Animal Sciences,পশুচিকিৎসা ও প্রাণিবিজ্ঞান বিভাগ,department,39,VAS,Veterinary and Animal Sciences Department,410,True
+42,Department of Agricultural Engineering,কৃষি প্রকৌশল বিভাগ,department,39,AE,Agricultural Engineering Department,420,True
+43,Department of Agricultural Economics & Marketing Policy,কৃষি অর্থনীতি ও বিপণন নীতি বিভাগ,department,39,AEMP,Agricultural Economics and Marketing Policy Department,430,True
+44,Department of Crop Science,ফসল বিজ্ঞান বিভাগ,department,39,CS,Crop Science Department,440,True
+45,Faculty of Business Studies,ব্যবসায় শিক্ষা অনুষদ,faculty,,FBS,Faculty of Business Studies,450,True
+46,Department of Accounting & Information System,হিসাববিজ্ঞান ও তথ্য ব্যবস্থা বিভাগ,department,45,AIS,Accounting and Information System Department,460,True
+47,Department of Management,ব্যবস্থাপনা বিভাগ,department,45,MGT,Management Department,470,True
+48,Department of Finance & Banking,অর্থ ও ব্যাংকিং বিভাগ,department,45,FB,Finance and Banking Department,480,True
+49,Department of Marketing,বিপণন বিভাগ,department,45,MKT,Marketing Department,490,True
+50,Faculty of Arts & Social Science,কলা ও সমাজবিজ্ঞান অনুষদ,faculty,,FASS,Faculty of Arts and Social Science,500,True
+51,Department of English,ইংরেজি বিভাগ,department,50,ENG,English Department,510,True
+52,Department of Humanities,মানবিক বিভাগ,department,50,HUM,Humanities Department (Non Degree),520,True
+53,Office of the Registrar,রেজিস্ট্রার অফিস,office,2,REG,Registrar's Office and Administrative Sections,530,True
+54,Office of the Librarian,গ্রন্থাগারিক অফিস,office,2,LIB,Central Library,540,True
+55,Office of the Controller of Examinations,পরীক্ষা নিয়ন্ত্রক অফিস,office,2,COE,Controller of Examinations Office,550,True
+56,Office of the Chief Engineer,প্রধান প্রকৌশলী অফিস,office,2,CE,Chief Engineer's Office,560,True
+57,Office of the Chief Medical Officer,প্রধান চিকিৎসা কর্মকর্তা অফিস,office,2,CMO,Chief Medical Officer and Medical Center,570,True
+58,Office of the Director (Account),পরিচালক (হিসাব) অফিস,office,2,DA,Director of Accounts Office,580,True
+59,Office of the Director (Planning Development & Works),পরিচালক (পরিকল্পনা উন্নয়ন ও কার্য) অফিস,office,2,PDW,Planning Development and Works Office,590,True
+60,Office of the Director (Physical Education),পরিচালক (শারীরিক শিক্ষা) অফিস,office,2,DPE,Director of Physical Education Office,600,True
+61,Proctors Office,প্রক্টর অফিস,office,2,PROC,Proctor's Office,610,True
+62,Office of the Transport Administrator,পরিবহন প্রশাসক অফিস,office,2,TRANS,Transport Administration Office,620,True
+63,Audit Cell,নিরীক্ষা সেল,office,2,AUDIT,Internal Audit Cell,630,True
+64,International Service Centre,আন্তর্জাতিক সেবা কেন্দ্র,office,3,ISC,International Service Centre,640,True
+65,Technology Transfer Office,প্রযুক্তি স্থানান্তর অফিস,office,3,TTO,Technology Transfer Office,650,True
+66,Guest House (Dhaka & Jashore),গেস্ট হাউস (ঢাকা ও যশোর),facility,2,GH,Guest Houses,660,True
+67,Shaheed Mashiur Rahman Hall,শহীদ মশিউর রহমান হল,hall,,SMR-HALL,Male Residential Hall,670,True
+68,Sheikh Hasina Chitree Hall,শেখ হাসিনা চিত্রী হল,hall,,SHC-HALL,Female Residential Hall,680,True
+69,Munshi Mohammad Meherullah Hall,মুন্সী মোহাম্মদ মেহেরউল্লাহ হল,hall,,MMM-HALL,Male Residential Hall,690,True
+70,Birprotik Taramon Bibi Hall,বীরপ্রতীক তারামন বিবি হল,hall,,BTB-HALL,Female Residential Hall,700,True
+71,Dr. M.A. Wazed Miah Institute of Advance Studies,ড. এম.এ. ওয়াজেদ মিয়া উন্নত অধ্যয়ন ইনস্টিটিউট,institute,,MAWMIAS,Research Institute,710,True
+72,Office of the Director of Institutional Quality Assurance Cell,প্রাতিষ্ঠানিক মান নিশ্চিতকরণ সেল পরিচালক অফিস,office,2,IQAC,Quality Assurance Cell,720,True
+73,Center for Sophisticated Instrumentation & Research Lab,অত্যাধুনিক যন্ত্রপাতি ও গবেষণা ল্যাব কেন্দ্র,center,,CSIRL,Research Center,730,True
+74,Center for Disability Rehabilitation & Research,প্রতিবন্ধী পুনর্বাসন ও গবেষণা কেন্দ্র,center,,CDRR,Research Center,740,True
+75,Office of the Genome Center,জিনোম কেন্দ্র অফিস,center,,GC,Genome Research Center,750,True
+76,Office of the Incubation Center,ইনকিউবেশন কেন্দ্র অফিস,center,,IC,Incubation Center,760,True
+77,ICT Cell,আইসিটি সেল,office,2,ICT,Information and Communication Technology Cell,770,True
+78,TSC,শিক্ষক-ছাত্র কেন্দ্র,facility,,TSC,Teacher Student Center,780,True
+79,Day care Centre,ডে কেয়ার সেন্টার,facility,,DCC,Day Care Center,790,True
+80,Institute of Entrepreneurship,উদ্যোক্তা ইনস্টিটিউট,institute,,IOE,Entrepreneurship Institute,800,True
+81,Institute of Intellectual Property Rights and Technology Management,বুদ্ধিবৃত্তিক সম্পদ অধিকার ও প্রযুক্তি ব্যবস্থাপনা ইনস্টিটিউট,institute,,IIPRTM,IP Rights and Technology Management Institute,810,True
+82,Horticulture research Institute,উদ্যানতত্ত্ব গবেষণা ইনস্টিটিউট,institute,,HRI,Horticulture Research Institute,820,True
+83,Preventative medicine & Vaccine research Institute,প্রতিরোধক চিকিৎসা ও ভ্যাকসিন গবেষণা ইনস্টিটিউট,institute,,PMVRI,Preventative Medicine and Vaccine Research Institute,830,True
+84,Bio-fuel & renewable energy research Institute,জৈব জ্বালানি ও নবায়নযোগ্য শক্তি গবেষণা ইনস্টিটিউট,institute,,BRERI,Bio-fuel and Renewable Energy Research Institute,840,True
+85,Material Science research Institute,পদার্থ বিজ্ঞান গবেষণা ইনস্টিটিউট,institute,,MSRI,Material Science Research Institute,850,True
+86,Brood Fish Management Fish Hatchery and Wet-lab,ব্রুড মাছ ব্যবস্থাপনা মাছের হ্যাচারি ও ওয়েট-ল্যাব,facility,,BFM,Fish Hatchery and Research Facility,860,True
+87,Office of the Director of Students Counseling & Guidance,শিক্ষার্থী পরামর্শ ও নির্দেশনা পরিচালক অফিস,office,2,SCG,Student Counseling and Guidance Office,870,True
+88,Sheikh Rasel Gymnasium,শেখ রাসেল জিমনেসিয়াম,facility,,SRG,Gymnasium Facility,880,True
+89,Central Mosque (I),কেন্দ্রীয় মসজিদ (১),facility,,CM1,Main Central Mosque,890,True
+90,Central Mosque (II),কেন্দ্রীয় মসজিদ (২),facility,,CM2,Secondary Central Mosque,900,True
+91,Temple (Mandir),মন্দির,facility,,TEMPLE,Hindu Temple Facility,910,True
