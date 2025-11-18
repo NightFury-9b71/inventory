@@ -48,39 +48,27 @@
         </sql>
     </changeSet>
 
-    <changeSet id="seed-offices" author="system">
-        <comment>Seed offices data</comment>
+    <changeSet id="seed-offices-csv-v3" author="system">
+        <comment>Seed offices data from CSV</comment>
         <sql>
-            INSERT INTO offices (id, name, name_bn, type, parent_id, code, description, order_index, is_active, created_at, updated_at) VALUES
-            (1, 'Chancellor Office', 'চ্যান্সেলর অফিস', 'OFFICE', NULL, 'CHAN', 'Chancellor''s Office', 1, true, NOW(), NOW()),
-            (2, 'Vice Chancellor Office', 'উপাচার্য অফিস', 'OFFICE', NULL, 'VC', 'Vice Chancellor''s Office and Administrative Wing', 2, true, NOW(), NOW()),
-            (3, 'Pro Vice Chancellor Office', 'সহ-উপাচার্য অফিস', 'OFFICE', NULL, 'PVC', 'Pro Vice Chancellor''s Office', 3, true, NOW(), NOW()),
-            (4, 'Treasurer Office', 'কোষাধ্যক্ষ অফিস', 'OFFICE', NULL, 'TREAS', 'Treasurer''s Office', 4, true, NOW(), NOW()),
-            (5, 'Faculty of Engineering &amp; Technology', 'প্রকৌশল ও প্রযুক্তি অনুষদ', 'FACULTY', NULL, 'FET', 'Faculty of Engineering and Technology', 5, true, NOW(), NOW()),
-            (6, 'Department of Chemical Engineering', 'রাসায়নিক প্রকৌশল বিভাগ', 'DEPARTMENT', 5, 'ChE', 'Chemical Engineering Department', 6, true, NOW(), NOW()),
-            (7, 'Department of Industrial &amp; Production Engineering', 'শিল্প ও উৎপাদন প্রকৌশল বিভাগ', 'DEPARTMENT', 5, 'IPE', 'Industrial and Production Engineering Department', 7, true, NOW(), NOW()),
-            (8, 'Department of Petroleum &amp; Mining Engineering', 'পেট্রোলিয়াম ও খনন প্রকৌশল বিভাগ', 'DEPARTMENT', 5, 'PME', 'Petroleum and Mining Engineering Department', 8, true, NOW(), NOW()),
-            (9, 'Department of Electrical &amp; Electronic Engineering', 'বৈদ্যুতিক ও ইলেকট্রনিক প্রকৌশল বিভাগ', 'DEPARTMENT', 5, 'EEE', 'Electrical and Electronic Engineering Department', 9, true, NOW(), NOW()),
-            (10, 'Department of Textile Engineering', 'টেক্সটাইল প্রকৌশল বিভাগ', 'DEPARTMENT', 5, 'TE', 'Textile Engineering Department', 10, true, NOW(), NOW()),
-            (11, 'Department of Bio-Medical Engineering', 'বায়ো-মেডিকেল প্রকৌশল বিভাগ', 'DEPARTMENT', 5, 'BME', 'Bio-Medical Engineering Department', 11, true, NOW(), NOW()),
-            (12, 'Department of Mechatronics Engineering', 'মেকাট্রনিক্স প্রকৌশল বিভাগ', 'DEPARTMENT', 5, 'ME', 'Mechatronics Engineering Department', 12, true, NOW(), NOW()),
-            (13, 'Faculty of Computing &amp; Information Engineering', 'কম্পিউটিং ও তথ্য প্রকৌশল অনুষদ', 'FACULTY', NULL, 'FCIE', 'Faculty of Computing and Information Engineering', 13, true, NOW(), NOW()),
-            (14, 'Department of Computer Science &amp; Engineering', 'কম্পিউটার বিজ্ঞান ও প্রকৌশল বিভাগ', 'DEPARTMENT', 13, 'CSE', 'Computer Science and Engineering Department', 14, true, NOW(), NOW()),
-            (15, 'Department of Software Engineering', 'সফটওয়্যার প্রকৌশল বিভাগ', 'DEPARTMENT', 13, 'SE', 'Software Engineering Department', 15, true, NOW(), NOW()),
-            (16, 'Department of Computational Biology', 'কম্পিউটেশনাল জীববিজ্ঞান বিভাগ', 'DEPARTMENT', 13, 'CB', 'Computational Biology Department', 16, true, NOW(), NOW()),
-            (53, 'Office of the Registrar', 'রেজিস্ট্রার অফিস', 'OFFICE', 2, 'REG', 'Registrar''s Office and Administrative Sections', 53, true, NOW(), NOW()),
-            (54, 'Office of the Librarian', 'গ্রন্থাগারিক অফিস', 'OFFICE', 2, 'LIB', 'Central Library', 54, true, NOW(), NOW()),
-            (77, 'ICT Cell', 'আইসিটি সেল', 'OFFICE', 2, 'ICT', 'Information and Communication Technology Cell', 77, true, NOW(), NOW())
-            ON DUPLICATE KEY UPDATE
-                name = VALUES(name),
-                name_bn = VALUES(name_bn),
-                type = VALUES(type),
-                parent_id = VALUES(parent_id),
-                code = VALUES(code),
-                description = VALUES(description),
-                order_index = VALUES(order_index),
-                is_active = VALUES(is_active),
-                updated_at = NOW();
+            SET FOREIGN_KEY_CHECKS = 0;
+            DELETE FROM offices WHERE id IS NOT NULL;
+            SET FOREIGN_KEY_CHECKS = 1;
+        </sql>
+        <loadData tableName="offices" file="csv/office.csv" separator="," encoding="UTF-8">
+            <column name="id" type="NUMERIC"/>
+            <column name="name" type="STRING"/>
+            <column name="name_bn" type="STRING"/>
+            <column name="type" type="STRING"/>
+            <column name="parent_id" type="NUMERIC"/>
+            <column name="code" type="STRING"/>
+            <column name="description" type="STRING"/>
+            <column name="order_index" header="order" type="NUMERIC"/>
+            <column name="is_active" type="BOOLEAN"/>
+        </loadData>
+        <sql>
+            UPDATE offices SET type = UPPER(type) WHERE type IS NOT NULL;
+            UPDATE offices SET created_at = NOW(), updated_at = NOW() WHERE created_at IS NULL;
         </sql>
     </changeSet>
 
