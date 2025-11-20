@@ -9,5 +9,6 @@
     <include file="db/changelog/db.changelog-drop-tables.xml"/>
     <include file="db/changelog/db.changelog-create-tables.xml"/>
     <include file="db/changelog/db.changelog-seed-data.xml"/>
+    <include file="db/changelog/db.changelog-add-office-to-transactions.xml"/>
 
 </databaseChangeLog>

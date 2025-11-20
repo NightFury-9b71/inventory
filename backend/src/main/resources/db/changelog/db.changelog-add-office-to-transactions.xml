@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="add-office-to-purchases" author="system">
+        <comment>Add office_id to purchases table for office-based inventory tracking</comment>
+        <addColumn tableName="purchases">
+            <column name="office_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="purchases" baseColumnNames="office_id"
+                                 referencedTableName="offices" referencedColumnNames="id"
+                                 constraintName="fk_purchases_office"/>
+        <createIndex tableName="purchases" indexName="idx_purchases_office">
+            <column name="office_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="update-existing-purchases-with-office" author="system">
+        <comment>Update existing purchases with office_id from user designation</comment>
+        <sql>
+            UPDATE purchases p
+            INNER JOIN users u ON p.purchased_by = u.id
+            INNER JOIN designations d ON u.id = d.user_id
+            SET p.office_id = d.office_id
+            WHERE d.is_primary = 1 AND d.is_active = 1
+            AND p.office_id IS NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="make-purchases-office-nullable-false" author="system">
+        <comment>Make office_id not nullable in purchases after data migration</comment>
+        <addNotNullConstraint tableName="purchases" columnName="office_id" columnDataType="BIGINT"/>
+    </changeSet>
+
+    <changeSet id="simplify-roles-to-admin-user" author="system">
+        <comment>Clean up roles and keep only ADMIN and USER</comment>
+        <sql>
+            -- Update all non-standard roles to either ADMIN or USER based on purchasing power
+            UPDATE designations d
+            INNER JOIN roles r ON d.role_id = r.id
+            SET d.role_id = (
+                SELECT id FROM roles WHERE name = 
+                CASE 
+                    WHEN r.purchasing_power = 1 THEN 'ROLE_ADMIN'
+                    ELSE 'ROLE_USER'
+                END
+                LIMIT 1
+            )
+            WHERE r.name NOT IN ('ROLE_ADMIN', 'ROLE_USER', 'ROLE_SUPER_ADMIN');
+        </sql>
+    </changeSet>
+
+    <changeSet id="update-role-purchasing-power" author="system">
+        <comment>Ensure ADMIN has purchasing power and USER does not</comment>
+        <sql>
+            UPDATE roles SET purchasing_power = 1, description = 'Administrator with full access and purchasing power' 
+            WHERE name = 'ROLE_ADMIN';
+            
+            UPDATE roles SET purchasing_power = 0, description = 'Regular user with limited access' 
+            WHERE name = 'ROLE_USER';
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-office-index-to-distributions" author="system">
+        <comment>Add index for office in distributions for better query performance</comment>
+        <createIndex tableName="item_distributions" indexName="idx_distributions_office">
+            <column name="office_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-office-index-to-movements" author="system">
+        <comment>Add indexes for office in movements for better query performance</comment>
+        <createIndex tableName="item_movements" indexName="idx_movements_from_office">
+            <column name="from_office_id"/>
+        </createIndex>
+        <createIndex tableName="item_movements" indexName="idx_movements_to_office">
+            <column name="to_office_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

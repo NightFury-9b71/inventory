@@ -27,4 +27,11 @@ public interface ItemMovementRepository extends JpaRepository<ItemMovement, Long
     
     @Query("SELECT m FROM ItemMovement m WHERE m.isActive = true ORDER BY m.dateMoved DESC")
     List<ItemMovement> findRecentMovements();
+    
+    // Office-based queries
+    @Query("SELECT m FROM ItemMovement m WHERE (m.fromOfficeId.id = :officeId OR m.toOfficeId.id = :officeId) AND m.isActive = true ORDER BY m.dateMoved DESC")
+    List<ItemMovement> findByOfficeId(@Param("officeId") Long officeId);
+    
+    @Query("SELECT m FROM ItemMovement m WHERE (m.fromOfficeId.id IN :officeIds OR m.toOfficeId.id IN :officeIds) AND m.isActive = true ORDER BY m.dateMoved DESC")
+    List<ItemMovement> findByOfficeIds(@Param("officeIds") List<Long> officeIds);
 }

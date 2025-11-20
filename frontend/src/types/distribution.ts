@@ -25,14 +25,11 @@ export interface DistributionFormData {
 }
 
 export interface OfficeInventory {
-  id: number;
   officeId: number;
   officeName: string;
   itemId: number;
   itemName: string;
   itemCode: string;
   quantity: number;
-  lastUpdated: string;
-  createdAt?: string;
-  updatedAt?: string;
+  unitName?: string;
 }

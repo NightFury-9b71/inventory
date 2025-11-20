@@ -24,4 +24,18 @@ public interface DesignationService {
     Optional<Designation> getPrimaryDesignation(User user);
     void assignPrimaryDesignation(User user, Designation designation);
     DesignationDTO convertToDTO(Designation designation);
+    
+    /**
+     * Get primary office ID for a user
+     * @param userId User ID
+     * @return Office ID or null if not found
+     */
+    Long getPrimaryOfficeId(Long userId);
+    
+    /**
+     * Check if user is admin (has ROLE_ADMIN)
+     * @param userId User ID
+     * @return true if user has admin role
+     */
+    boolean isUserAdmin(Long userId);
 }

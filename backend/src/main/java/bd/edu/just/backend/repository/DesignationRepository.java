@@ -38,4 +38,9 @@ public interface DesignationRepository extends JpaRepository<Designation, Long> 
     List<User> findUsersWithPurchasingPower();
 
     boolean existsByUserAndRoleAndOfficeAndIsActive(User user, Role role, Office office, Boolean isActive);
+    
+    // Query by user ID
+    List<Designation> findByUserIdAndIsActive(Long userId, Boolean isActive);
+    
+    List<Designation> findByUserIdAndIsActiveAndIsPrimary(Long userId, Boolean isActive, Boolean isPrimary);
 }

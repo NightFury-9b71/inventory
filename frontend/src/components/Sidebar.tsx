@@ -20,7 +20,8 @@ import {
   Building2,
   TrendingUp,
   Ruler,
-  User
+  User,
+  Warehouse
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SidebarItems } from '@/types/constant';
@@ -47,6 +48,7 @@ export default function Sidebar() {
       title: 'Inventory',
       items: [
         { icon: Package, label: 'Items', href: '/items' },
+        { icon: Warehouse, label: 'Inventory', href: '/inventory' },
         { icon: FolderTree, label: 'Categories', href: '/categories' },
         { icon: Ruler, label: 'Units', href: '/units' },
       ]
@@ -56,6 +58,7 @@ export default function Sidebar() {
       items: [
         { icon: ShoppingCart, label: 'Purchases', href: '/purchases' },
         { icon: Send, label: 'Distributions', href: '/distributions' },
+        { icon: Building2, label: 'Office Distributions', href: '/office-distributions' },
         { icon: ArrowLeftRight, label: 'Movements', href: '/movements' },
       ]
     },

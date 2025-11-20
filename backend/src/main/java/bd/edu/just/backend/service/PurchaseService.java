@@ -8,11 +8,13 @@ import bd.edu.just.backend.model.PurchaseItem;
 import bd.edu.just.backend.model.ItemInstance;
 import bd.edu.just.backend.model.Item;
 import bd.edu.just.backend.model.User;
+import bd.edu.just.backend.model.Office;
 import bd.edu.just.backend.repository.PurchaseRepository;
 import bd.edu.just.backend.repository.PurchaseItemRepository;
 import bd.edu.just.backend.repository.ItemInstanceRepository;
 import bd.edu.just.backend.repository.ItemRepository;
 import bd.edu.just.backend.repository.UserRepository;
+import bd.edu.just.backend.repository.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,9 @@ public class PurchaseService {
     private UserRepository userRepository;
 
     @Autowired
+    private OfficeRepository officeRepository;
+
+    @Autowired
     private ItemService itemService;
 
     @Autowired
@@ -50,8 +55,38 @@ public class PurchaseService {
     @Autowired
     private BarcodeGenerationService barcodeGenerationService;
 
+    @Autowired
+    private UserOfficeAccessService userOfficeAccessService;
+
+    @Autowired
+    private OfficeHierarchyService officeHierarchyService;
+
     public List<PurchaseDTO> getAllPurchases() {
-        return purchaseRepository.findByIsActiveTrue().stream()
+        List<Long> accessibleOfficeIds = userOfficeAccessService.getCurrentUserAccessibleOfficeIds();
+        
+        // If no accessible offices, return empty list
+        if (accessibleOfficeIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        return purchaseRepository.findByOfficeIdsAndIsActiveTrue(accessibleOfficeIds).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get purchases for a specific user based on their office and role
+     * ADMIN: Can see purchases from their office and all child offices
+     * USER: Can only see purchases from their own office
+     */
+    public List<PurchaseDTO> getPurchasesForUser(Long officeId, boolean isAdmin) {
+        List<Long> accessibleOfficeIds = officeHierarchyService.getAccessibleOfficeIds(officeId, isAdmin);
+        
+        if (accessibleOfficeIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        return purchaseRepository.findByOfficeIdsAndIsActiveTrue(accessibleOfficeIds).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -67,6 +102,15 @@ public class PurchaseService {
         User user = userRepository.findById(purchaseDTO.getPurchasedById())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // Get user's primary office from designation
+        Long userOfficeId = designationService.getPrimaryOfficeId(user.getId());
+        if (userOfficeId == null) {
+            throw new RuntimeException("User does not have an assigned office");
+        }
+        
+        Office office = officeRepository.findById(userOfficeId)
+                .orElseThrow(() -> new RuntimeException("Office not found"));
+
         // Create the main Purchase entity
         Purchase purchase = new Purchase();
         purchase.setVendorName(purchaseDTO.getVendorName());
@@ -76,6 +120,7 @@ public class PurchaseService {
         purchase.setInvoiceNumber(purchaseDTO.getInvoiceNumber());
         purchase.setRemarks(purchaseDTO.getRemarks());
         purchase.setPurchasedBy(user);
+        purchase.setOffice(office);
         purchase.setIsActive(true);
 
         // Save the purchase first to get the ID
@@ -322,6 +367,13 @@ public class PurchaseService {
         dto.setRemarks(purchase.getRemarks());
         dto.setPurchasedById(purchase.getPurchasedBy().getId());
         dto.setPurchasedByName(purchase.getPurchasedBy().getUsername());
+        
+        // Add office information
+        if (purchase.getOffice() != null) {
+            dto.setOfficeId(purchase.getOffice().getId());
+            dto.setOfficeName(purchase.getOffice().getName());
+        }
+        
         dto.setIsActive(purchase.getIsActive());
         return dto;
     }

@@ -30,6 +30,12 @@ For each office/department, two users are created:
 | user_treas | user.treas@just.edu.bd | Treasurer Office User | Treasurer Office | STAFF |
 | admin_treas | admin.treas@just.edu.bd | Treasurer Office Admin | Treasurer Office | ADMIN |
 
+### Faculty of Engineering & Technology
+| Username | Email | Name | Faculty | Role |
+|----------|-------|------|---------|------|
+| user_fet | user.fet@just.edu.bd | Faculty of Engineering & Technology User | Faculty of Engineering & Technology | STAFF |
+| admin_fet | admin.fet@just.edu.bd | Faculty of Engineering & Technology Admin | Faculty of Engineering & Technology | ADMIN |
+
 ### Engineering Departments
 | Username | Email | Name | Department | Role |
 |----------|-------|------|------------|------|
@@ -177,8 +183,8 @@ For each office/department, two users are created:
 | admin_scg | admin.scg@just.edu.bd | SCG Admin | Student Counseling & Guidance | ADMIN |
 
 ## Total Statistics
-- **Total Users**: 102 (2 system admins + 100 office/department users)
-- **Total Offices/Departments**: 50
+- **Total Users**: 104 (2 system admins + 102 office/department/faculty users)
+- **Total Offices/Departments/Faculties**: 51
 - **User-to-Office Ratio**: 2 users per office (1 regular user + 1 admin)
 
 ## Roles Overview

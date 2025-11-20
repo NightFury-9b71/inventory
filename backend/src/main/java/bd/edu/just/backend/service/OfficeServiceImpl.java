@@ -20,6 +20,9 @@ public class OfficeServiceImpl implements OfficeService {
     private final OfficeRepository officeRepository;
 
     @Autowired
+    private UserOfficeAccessService userOfficeAccessService;
+
+    @Autowired
     public OfficeServiceImpl(OfficeRepository officeRepository) {
         this.officeRepository = officeRepository;
     }
@@ -41,14 +44,33 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public List<OfficeResponseDTO> getAllOfficesDto() {
-        List<Office> offices = officeRepository.findAll();
-        return offices.stream()
-                .filter(office -> office.getParentOffice() == null) // Get only root offices
+        List<Long> accessibleOfficeIds = userOfficeAccessService.getCurrentUserAccessibleOfficeIds();
+        
+        // If no accessible offices, return empty list
+        if (accessibleOfficeIds.isEmpty()) {
+            return List.of();
+        }
+        
+        // Get all offices and filter to only accessible ones
+        List<Office> allOffices = officeRepository.findAll();
+        List<Office> accessibleOffices = allOffices.stream()
+                .filter(office -> accessibleOfficeIds.contains(office.getId()))
+                .toList();
+        
+        // Find root offices (offices that are accessible but their parent is not accessible or null)
+        List<Office> rootOffices = accessibleOffices.stream()
+                .filter(office -> office.getParentOffice() == null || 
+                        !accessibleOfficeIds.contains(office.getParentOffice().getId()))
+                .toList();
+        
+        return rootOffices.stream()
                 .map(this::convertToDto)
                 .toList();
     }
 
     private OfficeResponseDTO convertToDto(Office office) {
+        List<Long> accessibleOfficeIds = userOfficeAccessService.getCurrentUserAccessibleOfficeIds();
+        
         OfficeResponseDTO dto = new OfficeResponseDTO(
             office.getId(),
             office.getName(),
@@ -63,9 +85,10 @@ public class OfficeServiceImpl implements OfficeService {
             office.getUpdatedAt()
         );
         
-        // Convert sub-offices without circular references
+        // Convert sub-offices without circular references, but only include accessible ones
         if (office.getSubOffices() != null && !office.getSubOffices().isEmpty()) {
             List<OfficeResponseDTO> subOfficeDtos = office.getSubOffices().stream()
+                    .filter(subOffice -> accessibleOfficeIds.contains(subOffice.getId()))
                     .map(this::convertToDto)
                     .toList();
             dto.setSubOffices(subOfficeDtos);

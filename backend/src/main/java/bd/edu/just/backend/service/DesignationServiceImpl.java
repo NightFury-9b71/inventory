@@ -146,4 +146,25 @@ public class DesignationServiceImpl implements DesignationService {
             designation.getUpdatedAt()
         );
     }
+    
+    @Override
+    public Long getPrimaryOfficeId(Long userId) {
+        List<Designation> designations = designationRepository.findByUserIdAndIsActiveAndIsPrimary(userId, true, true);
+        if (!designations.isEmpty()) {
+            return designations.get(0).getOffice().getId();
+        }
+        // If no primary designation, get any active designation
+        designations = designationRepository.findByUserIdAndIsActive(userId, true);
+        if (!designations.isEmpty()) {
+            return designations.get(0).getOffice().getId();
+        }
+        return null;
+    }
+    
+    @Override
+    public boolean isUserAdmin(Long userId) {
+        List<Designation> designations = designationRepository.findByUserIdAndIsActive(userId, true);
+        return designations.stream()
+                .anyMatch(d -> "ROLE_ADMIN".equals(d.getRole().getName()) || "ROLE_SUPER_ADMIN".equals(d.getRole().getName()));
+    }
 }

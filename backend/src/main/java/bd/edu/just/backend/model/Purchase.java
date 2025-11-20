@@ -39,6 +39,10 @@ public class Purchase {
     @JoinColumn(name = "purchased_by", nullable = false)
     private User purchasedBy;
 
+    @ManyToOne
+    @JoinColumn(name = "office_id", nullable = false)
+    private Office office;
+
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
@@ -73,10 +77,11 @@ public class Purchase {
 
     public Purchase() {}
 
-    public Purchase(String vendorName, LocalDate purchaseDate, User purchasedBy) {
+    public Purchase(String vendorName, LocalDate purchaseDate, User purchasedBy, Office office) {
         this.vendorName = vendorName;
         this.purchaseDate = purchaseDate;
         this.purchasedBy = purchasedBy;
+        this.office = office;
         this.isActive = true;
         this.totalPrice = 0.0;
     }
@@ -180,5 +185,13 @@ public class Purchase {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public Office getOffice() {
+        return office;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
     }
 }

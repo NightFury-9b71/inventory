@@ -39,6 +39,8 @@
             ('admin_treas', 'admin.treas@just.edu.bd', 'Treasurer Office Admin', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
             ('user_cse', 'user.cse@just.edu.bd', 'CSE User', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
             ('admin_cse', 'admin.cse@just.edu.bd', 'CSE Admin', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+            ('user_fet', 'user.fet@just.edu.bd', 'Faculty of Engineering and Technology User', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+            ('admin_fet', 'admin.fet@just.edu.bd', 'Faculty of Engineering and Technology Admin', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
             ('user_reg', 'user.reg@just.edu.bd', 'Registrar User', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
             ('admin_reg', 'admin.reg@just.edu.bd', 'Registrar Admin', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')
             ON DUPLICATE KEY UPDATE
@@ -89,6 +91,8 @@
             ((SELECT id FROM users WHERE username = 'admin_treas'), (SELECT id FROM roles WHERE name = 'ROLE_ADMIN'), 4, true, true, NOW(), NOW(), NOW()),
             ((SELECT id FROM users WHERE username = 'user_cse'), (SELECT id FROM roles WHERE name = 'ROLE_FACULTY_MEMBER'), 14, true, true, NOW(), NOW(), NOW()),
             ((SELECT id FROM users WHERE username = 'admin_cse'), (SELECT id FROM roles WHERE name = 'ROLE_DEPARTMENT_HEAD'), 14, true, true, NOW(), NOW(), NOW()),
+            ((SELECT id FROM users WHERE username = 'user_fet'), (SELECT id FROM roles WHERE name = 'ROLE_STAFF'), 5, true, true, NOW(), NOW(), NOW()),
+            ((SELECT id FROM users WHERE username = 'admin_fet'), (SELECT id FROM roles WHERE name = 'ROLE_ADMIN'), 5, true, true, NOW(), NOW(), NOW()),
             ((SELECT id FROM users WHERE username = 'user_reg'), (SELECT id FROM roles WHERE name = 'ROLE_STAFF'), 53, true, true, NOW(), NOW(), NOW()),
             ((SELECT id FROM users WHERE username = 'admin_reg'), (SELECT id FROM roles WHERE name = 'ROLE_ADMIN'), 53, true, true, NOW(), NOW(), NOW())
             ON DUPLICATE KEY UPDATE

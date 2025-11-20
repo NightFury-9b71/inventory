@@ -15,6 +15,8 @@ public class PurchaseDTO {
     private String remarks;
     private Long purchasedById;
     private String purchasedByName;
+    private Long officeId;
+    private String officeName;
     private Boolean isActive;
 
     public PurchaseDTO() {}
@@ -59,6 +61,12 @@ public class PurchaseDTO {
     
     public String getPurchasedByName() { return purchasedByName; }
     public void setPurchasedByName(String purchasedByName) { this.purchasedByName = purchasedByName; }
+    
+    public Long getOfficeId() { return officeId; }
+    public void setOfficeId(Long officeId) { this.officeId = officeId; }
+    
+    public String getOfficeName() { return officeName; }
+    public void setOfficeName(String officeName) { this.officeName = officeName; }
     
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean isActive) { this.isActive = isActive; }

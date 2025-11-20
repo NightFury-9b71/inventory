@@ -38,9 +38,19 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
     @Autowired
     private OfficeInventoryService officeInventoryService;
 
+    @Autowired
+    private UserOfficeAccessService userOfficeAccessService;
+
     @Override
     public List<ItemDistributionDTO> getAllDistributions() {
-        return distributionRepository.findAll().stream()
+        List<Long> accessibleOfficeIds = userOfficeAccessService.getCurrentUserAccessibleOfficeIds();
+        
+        // If no accessible offices, return empty list
+        if (accessibleOfficeIds.isEmpty()) {
+            return List.of();
+        }
+        
+        return distributionRepository.findByOfficeIdsAndIsActiveTrue(accessibleOfficeIds).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }

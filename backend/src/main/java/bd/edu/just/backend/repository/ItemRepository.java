@@ -32,4 +32,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     
     @Query("SELECT SUM(i.quantity) FROM Item i WHERE i.isActive = true")
     Long getTotalStock();
+
+    @Query("SELECT DISTINCT i FROM Item i WHERE i.isActive = true AND i.id IN " +
+           "(SELECT oi.item.id FROM OfficeInventory oi WHERE oi.office.id IN :officeIds AND oi.quantity > 0)")
+    List<Item> findItemsByAccessibleOffices(@Param("officeIds") List<Long> officeIds);
 }

@@ -34,4 +34,13 @@ public interface ItemDistributionRepository extends JpaRepository<ItemDistributi
     
     @Query("SELECT COUNT(d) FROM ItemDistribution d WHERE d.status = :status AND d.isActive = true")
     Long countByStatus(@Param("status") DistributionStatus status);
+    
+    // Office-based queries
+    List<ItemDistribution> findByOfficeIdAndIsActiveTrue(Long officeId);
+    
+    @Query("SELECT d FROM ItemDistribution d WHERE d.office.id IN :officeIds AND d.isActive = true ORDER BY d.dateDistributed DESC")
+    List<ItemDistribution> findByOfficeIdsAndIsActiveTrue(@Param("officeIds") List<Long> officeIds);
+    
+    @Query("SELECT d FROM ItemDistribution d WHERE d.office.id = :officeId AND d.dateDistributed BETWEEN :startDate AND :endDate AND d.isActive = true")
+    List<ItemDistribution> findByOfficeIdAndDateRange(@Param("officeId") Long officeId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

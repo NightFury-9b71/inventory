@@ -31,4 +31,16 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
     
     @Query("SELECT DISTINCT p FROM Purchase p JOIN p.purchaseItems pi WHERE pi.item.id = :itemId AND p.isActive = true")
     List<Purchase> findByItemId(@Param("itemId") Long itemId);
+    
+    // Office-based queries
+    List<Purchase> findByOfficeIdAndIsActiveTrue(Long officeId);
+    
+    @Query("SELECT p FROM Purchase p WHERE p.office.id IN :officeIds AND p.isActive = true ORDER BY p.purchaseDate DESC")
+    List<Purchase> findByOfficeIdsAndIsActiveTrue(@Param("officeIds") List<Long> officeIds);
+    
+    @Query("SELECT p FROM Purchase p WHERE p.office.id = :officeId AND p.purchaseDate BETWEEN :startDate AND :endDate AND p.isActive = true")
+    List<Purchase> findByOfficeIdAndDateRange(@Param("officeId") Long officeId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    
+    @Query("SELECT SUM(p.totalPrice) FROM Purchase p WHERE p.office.id = :officeId AND p.isActive = true")
+    Double getTotalPurchaseValueByOffice(@Param("officeId") Long officeId);
 }
