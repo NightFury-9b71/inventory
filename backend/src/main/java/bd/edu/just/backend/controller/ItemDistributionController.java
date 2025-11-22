@@ -82,6 +82,12 @@ public class ItemDistributionController {
         ItemDistributionDTO updatedDistribution = distributionService.updateDistribution(id, requestDTO);
         return ResponseEntity.ok(updatedDistribution);
     }
+    
+    @PutMapping("/{id}/accept")
+    public ResponseEntity<ItemDistributionDTO> acceptTransfer(@PathVariable Long id) {
+        ItemDistributionDTO updatedDistribution = distributionService.acceptTransfer(id);
+        return ResponseEntity.ok(updatedDistribution);
+    }
 
     @GetMapping("/{id}/barcodes")
     public ResponseEntity<List<ItemInstanceDTO>> getDistributionBarcodes(@PathVariable Long id) {

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Edit, Trash2, CheckCircle, XCircle } from "lucide-react";
 import Can from "@/components/auth/Can";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
-import { approveDistribution, rejectDistribution } from "@/services/distribution_service";
+import { approveDistribution, rejectDistribution, acceptTransfer } from "@/services/distribution_service";
 import { useAuth } from "@/contexts/AuthContext";
 import { Distribution } from "@/types/distribution";
 
@@ -33,6 +33,7 @@ export default function HeaderActions({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
+  const [accepting, setAccepting] = useState(false);
   const { user } = useAuth();
 
   const handleDeleteConfirm = () => {
@@ -67,8 +68,27 @@ export default function HeaderActions({
       setRejecting(false);
     }
   };
+  
+  const handleAccept = async () => {
+    if (!distributionId) return;
+    setAccepting(true);
+    try {
+      await acceptTransfer(distributionId);
+      onStatusChange?.();
+    } catch (error) {
+      console.error("Failed to accept transfer:", error);
+    } finally {
+      setAccepting(false);
+    }
+  };
 
-  const canApproveReject = distribution?.status === "PENDING" && user?.officeId && parseInt(user.officeId) === distribution?.officeId;
+  // User can accept/reject if:
+  // 1. Transfer is PENDING
+  // 2. User's office matches the destination office (toOfficeId)
+  const canAcceptReject = distribution?.status === "PENDING" && 
+    user?.officeId && 
+    distribution?.toOfficeId && 
+    parseInt(user.officeId) === distribution.toOfficeId;
 
   return (
     <>
@@ -79,25 +99,25 @@ export default function HeaderActions({
             Back to Distributions
           </Button>
           <div className="flex gap-2">
-            {/* Approve/Reject buttons for receiving office users */}
-            {canApproveReject && (
+            {/* Accept/Reject buttons for receiving office users */}
+            {canAcceptReject && (
               <>
                 <Button
                   variant="default"
-                  onClick={handleApprove}
-                  disabled={approving || rejecting}
+                  onClick={handleAccept}
+                  disabled={accepting || approving || rejecting}
                   className="bg-green-600 hover:bg-green-700"
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  {approving ? "Approving..." : "Approve"}
+                  {accepting ? "Accepting..." : "Accept Transfer"}
                 </Button>
                 <Button
                   variant="destructive"
                   onClick={handleReject}
-                  disabled={approving || rejecting}
+                  disabled={accepting || approving || rejecting}
                 >
                   <XCircle className="h-4 w-4 mr-2" />
-                  {rejecting ? "Rejecting..." : "Reject"}
+                  {rejecting ? "Rejecting..." : "Reject Transfer"}
                 </Button>
               </>
             )}

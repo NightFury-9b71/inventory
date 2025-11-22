@@ -62,8 +62,9 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
             return List.of();
         }
         
-        // Use the new query that checks both fromOffice and toOffice
-        return distributionRepository.findByFromOrToOfficeIdsAndIsActiveTrue(accessibleOfficeIds).stream()
+        // Offices should only see transfers sent TO them (not transfers they send out)
+        // This way each office only sees the transfers they need to accept/confirm
+        return distributionRepository.findByToOfficeIdsAndIsActiveTrue(accessibleOfficeIds).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -419,5 +420,46 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
         dto.setUpdatedAt(distribution.getUpdatedAt());
         
         return dto;
+    }
+    
+    @Override
+    @Transactional
+    public ItemDistributionDTO acceptTransfer(Long id) {
+        ItemDistribution distribution = distributionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Distribution not found"));
+        
+        // Verify the transfer is for an office the current user has access to
+        List<Long> accessibleOfficeIds = userOfficeAccessService.getCurrentUserAccessibleOfficeIds();
+        Office toOffice = distribution.getToOffice() != null ? distribution.getToOffice() : distribution.getOffice();
+        
+        if (toOffice == null || !accessibleOfficeIds.contains(toOffice.getId())) {
+            throw new RuntimeException("You do not have permission to accept this transfer");
+        }
+        
+        // Check if already approved
+        if (distribution.getStatus() == DistributionStatus.APPROVED) {
+            throw new RuntimeException("This transfer has already been accepted");
+        }
+        
+        // Check if transfer is pending
+        if (distribution.getStatus() != DistributionStatus.PENDING) {
+            throw new RuntimeException("Only pending transfers can be accepted");
+        }
+        
+        // Update status to APPROVED
+        distribution.setStatus(DistributionStatus.APPROVED);
+        ItemDistribution savedDistribution = distributionRepository.save(distribution);
+        
+        // Update office inventory - add items to the receiving office
+        Item item = distribution.getItem();
+        Integer quantity = distribution.getQuantity();
+        
+        // For TRANSFER type, items were already moved during creation, just update inventory
+        // For other types, add to office inventory
+        if (distribution.getTransferType() != TransferType.TRANSFER) {
+            officeInventoryService.adjustInventory(toOffice, item, quantity);
+        }
+        
+        return convertToDTO(savedDistribution);
     }
 }

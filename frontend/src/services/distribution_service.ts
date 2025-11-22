@@ -13,6 +13,7 @@ export const ENDPOINTS = {
   distributions_by_date_range: "/distributions/date-range",
   approve_distribution: (id: number) => `/distributions/${id}/approve`,
   reject_distribution: (id: number) => `/distributions/${id}/reject`,
+  accept_transfer: (id: number) => `/distributions/${id}/accept`,
 };
 
 export const getDistributions = async (): Promise<Distribution[]> => {
@@ -73,6 +74,11 @@ export const approveDistribution = async (id: number): Promise<Distribution> => 
 
 export const rejectDistribution = async (id: number): Promise<Distribution> => {
   const response = await api.put(ENDPOINTS.reject_distribution(id));
+  return response.data;
+};
+
+export const acceptTransfer = async (id: number): Promise<Distribution> => {
+  const response = await api.put(ENDPOINTS.accept_transfer(id));
   return response.data;
 };
 

@@ -23,4 +23,6 @@ public interface ItemDistributionService {
     List<ItemDistributionDTO> getRecentDistributions();
 
     List<ItemInstanceDTO> getItemInstancesByDistribution(Long distributionId);
+    
+    ItemDistributionDTO acceptTransfer(Long id);
 }
