@@ -2,6 +2,7 @@ package bd.edu.just.backend.service;
 
 import bd.edu.just.backend.dto.ItemDistributionDTO;
 import bd.edu.just.backend.dto.ItemDistributionRequestDTO;
+import bd.edu.just.backend.dto.ItemInstanceDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface ItemDistributionService {
     List<ItemDistributionDTO> getDistributionsByDateRange(LocalDateTime startDate, LocalDateTime endDate);
 
     List<ItemDistributionDTO> getRecentDistributions();
+
+    List<ItemInstanceDTO> getItemInstancesByDistribution(Long distributionId);
 }

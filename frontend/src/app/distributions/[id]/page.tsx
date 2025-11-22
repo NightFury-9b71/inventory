@@ -8,6 +8,7 @@ import { getDistributionById, deleteDistribution } from "@/services/distribution
 import HeaderActions from "./components/HeaderActions";
 import DistributionInfoCard from "./components/DistributionInfoCard";
 import DistributionDetailsCard from "./components/DistributionDetailsCard";
+import BarcodeDisplay from "./components/BarcodeDisplay";
 import LoadingState from "./components/LoadingState";
 import ErrorState from "./components/ErrorState";
 
@@ -67,6 +68,8 @@ export default function DistributionDetailPage() {
         <DistributionInfoCard distribution={fullDistribution} />
         <DistributionDetailsCard distribution={fullDistribution} />
       </div>
+
+      <BarcodeDisplay distributionId={fullDistribution.id} />
     </div>
   );
 }

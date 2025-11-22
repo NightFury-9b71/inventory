@@ -2,6 +2,7 @@ package bd.edu.just.backend.controller;
 
 import bd.edu.just.backend.dto.ItemDistributionDTO;
 import bd.edu.just.backend.dto.ItemDistributionRequestDTO;
+import bd.edu.just.backend.dto.ItemInstanceDTO;
 import bd.edu.just.backend.service.ItemDistributionService;
 import bd.edu.just.backend.model.DistributionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +81,15 @@ public class ItemDistributionController {
         requestDTO.setStatus(DistributionStatus.REJECTED);
         ItemDistributionDTO updatedDistribution = distributionService.updateDistribution(id, requestDTO);
         return ResponseEntity.ok(updatedDistribution);
+    }
+
+    @GetMapping("/{id}/barcodes")
+    public ResponseEntity<List<ItemInstanceDTO>> getDistributionBarcodes(@PathVariable Long id) {
+        try {
+            List<ItemInstanceDTO> barcodes = distributionService.getItemInstancesByDistribution(id);
+            return ResponseEntity.ok(barcodes);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

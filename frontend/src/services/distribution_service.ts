@@ -1,9 +1,11 @@
 import api from "@/lib/api";
 import { Distribution, DistributionFormData } from "@/types/distribution";
+import { ItemInstance } from "@/types/purchase";
 
 export const ENDPOINTS = {
   get_distributions: "/distributions",
   distribution_by_id: (id: number) => `/distributions/${id}`,
+  distribution_barcodes: (id: number) => `/distributions/${id}/barcodes`,
   create_distribution: "/distributions",
   update_distribution: (id: number) => `/distributions/${id}`,
   delete_distribution: (id: number) => `/distributions/${id}`,
@@ -71,5 +73,10 @@ export const approveDistribution = async (id: number): Promise<Distribution> => 
 
 export const rejectDistribution = async (id: number): Promise<Distribution> => {
   const response = await api.put(ENDPOINTS.reject_distribution(id));
+  return response.data;
+};
+
+export const getDistributionBarcodes = async (id: number): Promise<ItemInstance[]> => {
+  const response = await api.get(ENDPOINTS.distribution_barcodes(id));
   return response.data;
 };

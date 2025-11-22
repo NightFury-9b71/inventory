@@ -41,6 +41,10 @@ public interface ItemDistributionRepository extends JpaRepository<ItemDistributi
     @Query("SELECT d FROM ItemDistribution d WHERE d.office.id IN :officeIds AND d.isActive = true ORDER BY d.dateDistributed DESC")
     List<ItemDistribution> findByOfficeIdsAndIsActiveTrue(@Param("officeIds") List<Long> officeIds);
     
+    // Query to find distributions where office is either sender or receiver
+    @Query("SELECT d FROM ItemDistribution d WHERE (d.fromOffice.id IN :officeIds OR d.toOffice.id IN :officeIds OR d.office.id IN :officeIds) AND d.isActive = true ORDER BY d.dateDistributed DESC")
+    List<ItemDistribution> findByFromOrToOfficeIdsAndIsActiveTrue(@Param("officeIds") List<Long> officeIds);
+    
     @Query("SELECT d FROM ItemDistribution d WHERE d.office.id = :officeId AND d.dateDistributed BETWEEN :startDate AND :endDate AND d.isActive = true")
     List<ItemDistribution> findByOfficeIdAndDateRange(@Param("officeId") Long officeId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

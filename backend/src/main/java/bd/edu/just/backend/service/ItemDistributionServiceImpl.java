@@ -7,13 +7,16 @@ import bd.edu.just.backend.model.Employee;
 import bd.edu.just.backend.model.User;
 import bd.edu.just.backend.model.DistributionStatus;
 import bd.edu.just.backend.model.TransferType;
+import bd.edu.just.backend.model.ItemInstance;
 import bd.edu.just.backend.dto.ItemDistributionDTO;
 import bd.edu.just.backend.dto.ItemDistributionRequestDTO;
+import bd.edu.just.backend.dto.ItemInstanceDTO;
 import bd.edu.just.backend.repository.ItemDistributionRepository;
 import bd.edu.just.backend.repository.ItemRepository;
 import bd.edu.just.backend.repository.OfficeRepository;
 import bd.edu.just.backend.repository.EmployeeRepository;
 import bd.edu.just.backend.repository.UserRepository;
+import bd.edu.just.backend.repository.ItemInstanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +50,9 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
     @Autowired
     private UserOfficeAccessService userOfficeAccessService;
 
+    @Autowired
+    private ItemInstanceRepository itemInstanceRepository;
+
     @Override
     public List<ItemDistributionDTO> getAllDistributions() {
         List<Long> accessibleOfficeIds = userOfficeAccessService.getCurrentUserAccessibleOfficeIds();
@@ -56,7 +62,8 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
             return List.of();
         }
         
-        return distributionRepository.findByOfficeIdsAndIsActiveTrue(accessibleOfficeIds).stream()
+        // Use the new query that checks both fromOffice and toOffice
+        return distributionRepository.findByFromOrToOfficeIdsAndIsActiveTrue(accessibleOfficeIds).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -297,6 +304,76 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
         return distributionRepository.findRecentDistributions().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ItemInstanceDTO> getItemInstancesByDistribution(Long distributionId) {
+        ItemDistribution distribution = distributionRepository.findById(distributionId)
+                .orElseThrow(() -> new RuntimeException("Distribution not found"));
+        
+        // Get item instances for this item that were distributed to the target office
+        Office targetOffice = distribution.getToOffice() != null ? distribution.getToOffice() : distribution.getOffice();
+        Item item = distribution.getItem();
+        
+        if (targetOffice == null) {
+            return List.of();
+        }
+        
+        // Get all instances distributed to this office for this item
+        List<ItemInstance> instances = itemInstanceRepository.findByItemId(item.getId()).stream()
+                .filter(instance -> 
+                    instance.getDistributedToOffice() != null && 
+                    instance.getDistributedToOffice().getId().equals(targetOffice.getId()) &&
+                    instance.getStatus() == ItemInstance.ItemInstanceStatus.DISTRIBUTED
+                )
+                .collect(Collectors.toList());
+        
+        return instances.stream()
+                .map(this::convertItemInstanceToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private ItemInstanceDTO convertItemInstanceToDTO(ItemInstance instance) {
+        ItemInstanceDTO dto = new ItemInstanceDTO();
+        dto.setId(instance.getId());
+        dto.setItemId(instance.getItem().getId());
+        dto.setItemName(instance.getItem().getName());
+        dto.setItemCode(instance.getItem().getCode());
+        dto.setItemDescription(instance.getItem().getDescription());
+        dto.setCategoryName(instance.getItem().getCategory() != null ? 
+            instance.getItem().getCategory().getName() : null);
+        dto.setPurchaseId(instance.getPurchase().getId());
+        dto.setBarcode(instance.getBarcode());
+        dto.setUnitPrice(instance.getUnitPrice());
+        dto.setStatus(instance.getStatus().name());
+        dto.setRemarks(instance.getRemarks());
+        dto.setCreatedAt(instance.getCreatedAt());
+        dto.setUpdatedAt(instance.getUpdatedAt());
+        
+        // Distribution info
+        if (instance.getDistributedToOffice() != null) {
+            dto.setDistributedToOfficeId(instance.getDistributedToOffice().getId());
+            dto.setDistributedToOfficeName(instance.getDistributedToOffice().getName());
+        }
+        dto.setDistributedAt(instance.getDistributedAt());
+
+        // Owner info
+        if (instance.getOwner() != null) {
+            dto.setOwnerId(instance.getOwner().getId());
+            dto.setOwnerName(instance.getOwner().getName());
+        }
+        
+        // Purchase details
+        if (instance.getPurchase() != null) {
+            dto.setVendorName(instance.getPurchase().getVendorName());
+            dto.setVendorContact(instance.getPurchase().getVendorContact());
+            dto.setPurchaseDate(instance.getPurchase().getPurchaseDate());
+            dto.setInvoiceNumber(instance.getPurchase().getInvoiceNumber());
+            dto.setPurchasedByName(instance.getPurchase().getPurchasedBy() != null ? 
+                instance.getPurchase().getPurchasedBy().getName() : null);
+        }
+        
+        return dto;
     }
 
     private ItemDistributionDTO convertToDTO(ItemDistribution distribution) {
