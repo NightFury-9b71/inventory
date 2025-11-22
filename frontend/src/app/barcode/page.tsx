@@ -167,11 +167,10 @@ export default function BarcodePage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                  ৳
                   Unit Price
                 </label>
                 <p className="text-lg font-semibold text-green-600">
-                  ${itemInstance.unitPrice.toFixed(2)}
+                  ৳{itemInstance.unitPrice.toFixed(2)}
                 </p>
               </div>
               <div>

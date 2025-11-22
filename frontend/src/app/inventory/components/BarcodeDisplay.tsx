@@ -109,9 +109,9 @@ export default function BarcodeDisplay() {
                 {itemName} ({itemBarcodes.length} items)
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {itemBarcodes.map((barcode) => (
+                {itemBarcodes.map((barcode, index) => (
                   <div
-                    key={barcode.id}
+                    key={`${itemName}-${index}`}
                     className="border p-3 rounded bg-white flex flex-col items-center"
                   >
                     <div className="font-mono text-sm font-bold mb-1">
@@ -121,7 +121,7 @@ export default function BarcodeDisplay() {
                       {barcode.itemCode}
                     </div>
                     <div className="text-sm font-semibold text-green-600 mb-1">
-                      ${barcode.unitPrice.toFixed(2)}
+                      ৳{barcode.unitPrice.toFixed(2)}
                     </div>
                     <div className="text-xs text-gray-500">
                       Status: <span className={`font-medium ${
@@ -143,7 +143,7 @@ export default function BarcodeDisplay() {
                         <g>
                           {Array.from({ length: 40 }, (_, i) => (
                             <rect
-                              key={`${barcode.id}-${i}`}
+                              key={`${itemName}-${index}-${i}`}
                               x={i * 5}
                               y="5"
                               width={Math.random() > 0.5 ? 2 : 3}
