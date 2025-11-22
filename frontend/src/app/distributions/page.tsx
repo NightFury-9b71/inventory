@@ -22,19 +22,32 @@ import Can from "@/components/auth/Can";
 
 export default function DistributionsPage() {
   const router = useRouter();
-  const { user } = useAuth();
 
   const columns = [
     { key: "itemName" as keyof Distribution, label: "Item" },
     { key: "quantity" as keyof Distribution, label: "Quantity" },
-    { key: "officeName" as keyof Distribution, label: "Office" },
-    { key: "userName" as keyof Distribution, label: "Distributed By" },
+    { key: "fromOfficeName" as keyof Distribution, label: "From Office" },
+    { key: "toOfficeName" as keyof Distribution, label: "To Office" },
+    { key: "transferType" as keyof Distribution, label: "Type" },
+    { key: "userName" as keyof Distribution, label: "Initiated By" },
+    { key: "employeeName" as keyof Distribution, label: "Employee" },
     { key: "dateDistributed" as keyof Distribution, label: "Date" },
     { key: "status" as keyof Distribution, label: "Status" },
     { key: "isActive" as keyof Distribution, label: "Active" },
   ];
 
   const filters = [
+    {
+      key: 'transferType',
+      label: 'Transfer Type',
+      options: [
+        { value: 'all', label: 'All Types' },
+        { value: 'ALLOCATION', label: 'Allocation' },
+        { value: 'TRANSFER', label: 'Transfer' },
+        { value: 'MOVEMENT', label: 'Movement' },
+        { value: 'RETURN', label: 'Return' },
+      ],
+    },
     {
       key: 'status',
       label: 'Status',
@@ -75,8 +88,8 @@ export default function DistributionsPage() {
   } = useTable({
     data: [],
     columns,
-    searchableKeys: ['itemName', 'officeName', 'userName'],
-    filterableKeys: ['status', 'isActive'],
+    searchableKeys: ['itemName', 'fromOfficeName', 'toOfficeName', 'userName', 'employeeName'],
+    filterableKeys: ['transferType', 'status', 'isActive'],
     pagination: {
       enabled: true,
       pageSize: 10,
@@ -116,19 +129,19 @@ export default function DistributionsPage() {
     <div>
       {/* Page Header */}
       <PageHeader>
-        <PageTitle title="Distribution Management" totalCount={totalCount} />
-        <PageSubtitle subtitle="Track and manage item distributions to offices and departments" />
+        <PageTitle title="Item Transfers" totalCount={totalCount} />
+        <PageSubtitle subtitle="Track and manage all item transfers, allocations, and movements between offices" />
         <PageToolbar>
           <Can page="/distributions" action="create">
             <Button onClick={() => router.push('/distributions/new')} className="mr-4">
               <Plus className="h-4 w-4 mr-2" />
-              Distribute Item
+              New Transfer
             </Button>
           </Can>
           <PageSearch
             searchTerm={searchTerm}
             setSearchTerm={handleSearch}
-            placeholder="Search distributions..."
+            placeholder="Search transfers..."
           />
           {filters.map((filter) => (
             <PageFilter
@@ -152,17 +165,17 @@ export default function DistributionsPage() {
         {isLoading ? (
           <div className="text-center py-8">
             <Truck className="h-12 w-12 text-blue-600 mx-auto mb-4 animate-pulse" />
-            <p className="text-gray-500">Loading distributions...</p>
+            <p className="text-gray-500">Loading transfers...</p>
           </div>
         ) : tableData.length === 0 ? (
           <div className="text-center py-8">
             <Truck className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No distributions found</h3>
-            <p className="text-gray-600 mb-4">Start by distributing items to offices.</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No transfers found</h3>
+            <p className="text-gray-600 mb-4">Start by creating your first item transfer.</p>
             <Can page="/distributions" action="create">
               <Button onClick={() => router.push('/distributions/new')}>
                 <Plus className="h-4 w-4 mr-2" />
-                Create First Distribution
+                Create First Transfer
               </Button>
             </Can>
           </div>

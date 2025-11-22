@@ -4,6 +4,7 @@ import { Office } from "@/types/office";
 
 export const ENDPOINTS = {
     get_offices: "/offices",
+    get_all_offices: "/offices/all",
     parent_offices: "/offices/parent",
     faculty_offices: "/offices/faculties",
     department_offices: "/offices/departments",
@@ -15,6 +16,11 @@ export const ENDPOINTS = {
 
 export const getOffices = async (): Promise<Office[]> => {
   const response = await api.get(ENDPOINTS.get_offices);
+  return response.data;
+};
+
+export const getAllOffices = async (): Promise<Office[]> => {
+  const response = await api.get(ENDPOINTS.get_all_offices);
   return response.data;
 };
 

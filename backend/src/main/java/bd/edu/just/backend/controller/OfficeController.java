@@ -33,6 +33,12 @@ public class OfficeController {
         return ResponseEntity.ok(offices);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Office>> getAllOfficesUnfiltered() {
+        List<Office> offices = officeService.getAllOffices();
+        return ResponseEntity.ok(offices);
+    }
+
     @GetMapping("/parent")
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Office>> getAllParentOffices() {

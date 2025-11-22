@@ -14,7 +14,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/office-distributions")
-@CrossOrigin(origins = "*")
 public class OfficeDistributionController {
 
     @Autowired

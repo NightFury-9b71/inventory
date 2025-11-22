@@ -8,15 +8,12 @@ import {
   Settings, 
   BarChart3, 
   Menu, 
-  LogOut,
   Package,
   FolderTree,
   ShoppingCart,
   Send,
-  ArrowLeftRight,
   FileText,
   QrCode,
-  AlertTriangle,
   Building2,
   TrendingUp,
   Ruler,
@@ -57,9 +54,7 @@ export default function Sidebar() {
       title: 'Operations',
       items: [
         { icon: ShoppingCart, label: 'Purchases', href: '/purchases' },
-        { icon: Send, label: 'Distributions', href: '/distributions' },
-        { icon: Building2, label: 'Office Distributions', href: '/office-distributions' },
-        { icon: ArrowLeftRight, label: 'Movements', href: '/movements' },
+        { icon: Send, label: 'Transfers', href: '/distributions' },
       ]
     },
     {

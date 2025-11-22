@@ -10,5 +10,7 @@
     <include file="db/changelog/db.changelog-create-tables.xml"/>
     <include file="db/changelog/db.changelog-seed-data.xml"/>
     <include file="db/changelog/db.changelog-add-office-to-transactions.xml"/>
+    <include file="db/changelog/db.changelog-update-distributions-schema.xml"/>
+    <include file="db/changelog/db.changelog-populate-office-inventory.xml"/>
 
 </databaseChangeLog>

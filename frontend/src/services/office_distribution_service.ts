@@ -67,17 +67,17 @@ export interface ChildOffice {
 
 // API Endpoints
 const ENDPOINTS = {
-  distribute: "/api/office-distributions/distribute",
-  return: "/api/office-distributions/return",
-  officeTransactions: (officeId: number) => `/api/office-distributions/office/${officeId}/transactions`,
-  itemHistory: (itemId: number) => `/api/office-distributions/item/${itemId}/history`,
-  pendingTransactions: (officeId: number) => `/api/office-distributions/office/${officeId}/pending`,
-  childOffices: (parentOfficeId: number) => `/api/office-distributions/office/${parentOfficeId}/children`,
-  parentOffice: (childOfficeId: number) => `/api/office-distributions/office/${childOfficeId}/parent`,
-  officeInventory: (officeId: number) => `/api/office-distributions/office/${officeId}/inventory`,
-  transactionByReference: (referenceNumber: string) => `/api/office-distributions/reference/${referenceNumber}`,
-  distributionHistory: (officeId: number) => `/api/office-distributions/office/${officeId}/distributions`,
-  returnHistory: (officeId: number) => `/api/office-distributions/office/${officeId}/returns`,
+  distribute: "/office-distributions/distribute",
+  return: "/office-distributions/return",
+  officeTransactions: (officeId: number) => `/office-distributions/office/${officeId}/transactions`,
+  itemHistory: (itemId: number) => `/office-distributions/item/${itemId}/history`,
+  pendingTransactions: (officeId: number) => `/office-distributions/office/${officeId}/pending`,
+  childOffices: (parentOfficeId: number) => `/office-distributions/office/${parentOfficeId}/children`,
+  parentOffice: (childOfficeId: number) => `/office-distributions/office/${childOfficeId}/parent`,
+  officeInventory: (officeId: number) => `/office-distributions/office/${officeId}/inventory`,
+  transactionByReference: (referenceNumber: string) => `/office-distributions/reference/${referenceNumber}`,
+  distributionHistory: (officeId: number) => `/office-distributions/office/${officeId}/distributions`,
+  returnHistory: (officeId: number) => `/office-distributions/office/${officeId}/returns`,
 };
 
 // Service Functions
@@ -109,7 +109,7 @@ export const getOfficeTransactions = async (
   officeId: number
 ): Promise<OfficeTransaction[]> => {
   const response = await api.get(ENDPOINTS.officeTransactions(officeId));
-  return response.data;
+  return response.data || [];
 };
 
 /**
@@ -179,7 +179,7 @@ export const getDistributionHistory = async (
   officeId: number
 ): Promise<OfficeTransaction[]> => {
   const response = await api.get(ENDPOINTS.distributionHistory(officeId));
-  return response.data;
+  return response.data || [];
 };
 
 /**
@@ -189,5 +189,5 @@ export const getReturnHistory = async (
   officeId: number
 ): Promise<OfficeTransaction[]> => {
   const response = await api.get(ENDPOINTS.returnHistory(officeId));
-  return response.data;
+  return response.data || [];
 };

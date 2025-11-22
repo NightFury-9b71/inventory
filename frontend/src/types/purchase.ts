@@ -48,6 +48,8 @@ export interface Purchase {
   remarks?: string;
   purchasedBy: number;
   purchasedByName: string;
+  officeId?: number;
+  officeName?: string;
   isActive: boolean;
   createdAt?: string;
   updatedAt?: string;

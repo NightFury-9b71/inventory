@@ -61,6 +61,9 @@ public class PurchaseService {
     @Autowired
     private OfficeHierarchyService officeHierarchyService;
 
+    @Autowired
+    private OfficeInventoryService officeInventoryService;
+
     public List<PurchaseDTO> getAllPurchases() {
         List<Long> accessibleOfficeIds = userOfficeAccessService.getCurrentUserAccessibleOfficeIds();
         
@@ -164,6 +167,9 @@ public class PurchaseService {
 
             // Update item stock
             itemService.updateStock(item.getId(), itemDTO.getQuantity());
+
+            // Add items to office inventory
+            officeInventoryService.adjustInventory(office, item, itemDTO.getQuantity());
         }
 
         // Calculate and set total price
@@ -188,9 +194,13 @@ public class PurchaseService {
         User user = userRepository.findById(purchaseDTO.getPurchasedById())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Reverse previous stock updates
+        // Reverse previous stock updates (both global and office inventory)
+        Office office = existingPurchase.getOffice();
         for (PurchaseItem pi : existingPurchase.getPurchaseItems()) {
+            // Reverse global item stock
             itemService.updateStock(pi.getItem().getId(), -pi.getQuantity());
+            // Reverse office inventory
+            officeInventoryService.adjustInventory(office, pi.getItem(), -pi.getQuantity());
         }
 
         // Clear old purchase items and item instances
@@ -239,6 +249,9 @@ public class PurchaseService {
 
             // Update item stock with new quantity
             itemService.updateStock(item.getId(), itemDTO.getQuantity());
+            
+            // Add items to office inventory
+            officeInventoryService.adjustInventory(existingPurchase.getOffice(), item, itemDTO.getQuantity());
         }
 
         // Calculate and set total price
@@ -274,9 +287,13 @@ public class PurchaseService {
         purchase.setIsActive(false);
         purchaseRepository.save(purchase);
         
-        // Optionally, you could also reverse the stock updates
+        // Reverse the stock updates (both global and office inventory)
+        Office office = purchase.getOffice();
         for (PurchaseItem pi : purchase.getPurchaseItems()) {
+            // Reverse global item stock
             itemService.updateStock(pi.getItem().getId(), -pi.getQuantity());
+            // Reverse office inventory
+            officeInventoryService.adjustInventory(office, pi.getItem(), -pi.getQuantity());
         }
     }
 

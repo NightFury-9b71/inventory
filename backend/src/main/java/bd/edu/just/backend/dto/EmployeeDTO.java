@@ -1,76 +1,39 @@
-package bd.edu.just.backend.model;
+package bd.edu.just.backend.dto;
 
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 
-
-@Entity
-@Table(name = "employees")
-public class Employee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EmployeeDTO {
     private Long id;
-
-    @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "name_bn")
     private String nameBn;
-
-    @Column(name = "designation", nullable = false)
     private String designation;
-
-    @Column(name = "employee_code", unique = true, nullable = false)
     private String employeeCode;
-
-    @ManyToOne
-    @JoinColumn(name = "office_id", nullable = false)
-    @JsonIgnore
-    private Office office;
-
-
-    @Column(name = "email", unique = true)
+    private Long officeId;
+    private String officeName;
     private String email;
-
-    @Column(name = "phone")
     private String phone;
-
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
+    private Boolean isActive;
     private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
+    public EmployeeDTO() {}
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
-    public Employee() {}
-
-    
-    public Employee(String name, String nameBn, String designation, String employeeCode, Office office, String email, String phone) {
+    public EmployeeDTO(Long id, String name, String nameBn, String designation, String employeeCode,
+                      Long officeId, String officeName, String email, String phone, Boolean isActive,
+                      LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
         this.name = name;
         this.nameBn = nameBn;
         this.designation = designation;
         this.employeeCode = employeeCode;
-        this.office = office;
+        this.officeId = officeId;
+        this.officeName = officeName;
         this.email = email;
         this.phone = phone;
+        this.isActive = isActive;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
-
-
 
     // Getters and Setters
     public Long getId() {
@@ -83,7 +46,7 @@ public class Employee {
 
     public String getName() {
         return name;
-    }   
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -113,12 +76,20 @@ public class Employee {
         this.employeeCode = employeeCode;
     }
 
-    public Office getOffice() {
-        return office;
+    public Long getOfficeId() {
+        return officeId;
     }
 
-    public void setOffice(Office office) {
-        this.office = office;
+    public void setOfficeId(Long officeId) {
+        this.officeId = officeId;
+    }
+
+    public String getOfficeName() {
+        return officeName;
+    }
+
+    public void setOfficeName(String officeName) {
+        this.officeName = officeName;
     }
 
     public String getEmail() {
@@ -137,7 +108,7 @@ public class Employee {
         this.phone = phone;
     }
 
-    public boolean getIsActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
@@ -145,6 +116,19 @@ public class Employee {
         this.isActive = isActive;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
-

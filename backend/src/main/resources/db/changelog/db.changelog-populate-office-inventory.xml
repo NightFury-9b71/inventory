@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="populate-office-inventory-from-purchases" author="system">
+        <!-- First, check if office_inventory table exists -->
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="office_inventory"/>
+            <tableExists tableName="purchases"/>
+            <tableExists tableName="purchase_items"/>
+        </preConditions>
+        
+        <comment>
+            Populate office_inventory table from existing active purchases.
+            This migration ensures that historical purchase data is reflected in the office inventory.
+        </comment>
+
+        <!-- Populate office inventory from existing purchases -->
+        <sql>
+            INSERT INTO office_inventory (office_id, item_id, quantity, last_updated, created_at, updated_at)
+            SELECT 
+                p.office_id,
+                pi.item_id,
+                SUM(pi.quantity) as total_quantity,
+                NOW() as last_updated,
+                NOW() as created_at,
+                NOW() as updated_at
+            FROM purchases p
+            JOIN purchase_items pi ON p.id = pi.purchase_id
+            WHERE p.is_active = 1
+            GROUP BY p.office_id, pi.item_id
+            ON DUPLICATE KEY UPDATE 
+                quantity = VALUES(quantity),
+                last_updated = NOW(),
+                updated_at = NOW();
+        </sql>
+
+        <rollback>
+            <!-- Rollback by deleting all office_inventory records -->
+            <delete tableName="office_inventory"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -3,13 +3,16 @@ package bd.edu.just.backend.service;
 import bd.edu.just.backend.model.ItemDistribution;
 import bd.edu.just.backend.model.Item;
 import bd.edu.just.backend.model.Office;
+import bd.edu.just.backend.model.Employee;
 import bd.edu.just.backend.model.User;
 import bd.edu.just.backend.model.DistributionStatus;
+import bd.edu.just.backend.model.TransferType;
 import bd.edu.just.backend.dto.ItemDistributionDTO;
 import bd.edu.just.backend.dto.ItemDistributionRequestDTO;
 import bd.edu.just.backend.repository.ItemDistributionRepository;
 import bd.edu.just.backend.repository.ItemRepository;
 import bd.edu.just.backend.repository.OfficeRepository;
+import bd.edu.just.backend.repository.EmployeeRepository;
 import bd.edu.just.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,9 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
 
     @Autowired
     private OfficeRepository officeRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -67,17 +73,60 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
     public ItemDistributionDTO createDistribution(ItemDistributionRequestDTO requestDTO) {
         Item item = itemRepository.findById(requestDTO.getItemId())
                 .orElseThrow(() -> new RuntimeException("Item not found"));
-        Office office = officeRepository.findById(requestDTO.getOfficeId())
-                .orElseThrow(() -> new RuntimeException("Office not found"));
+        
+        // Determine toOfficeId (support both old and new format)
+        Long toOfficeId = requestDTO.getToOfficeId() != null ? requestDTO.getToOfficeId() : requestDTO.getOfficeId();
+        if (toOfficeId == null) {
+            throw new RuntimeException("Destination office (toOfficeId) is required");
+        }
+        
+        Office toOffice = officeRepository.findById(toOfficeId)
+                .orElseThrow(() -> new RuntimeException("Destination office not found"));
+        
         User user = userRepository.findById(requestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Check if item has sufficient quantity
-        if (item.getQuantity() < requestDTO.getQuantity()) {
-            throw new RuntimeException("Insufficient item quantity");
+        // Determine transfer type (default to ALLOCATION if not provided)
+        TransferType transferType = requestDTO.getTransferType() != null ? requestDTO.getTransferType() : TransferType.ALLOCATION;
+
+        // Validate required fields based on transfer type
+        Office fromOffice = null;
+        Employee employee = null;
+        
+        if (transferType == TransferType.TRANSFER || transferType == TransferType.MOVEMENT || transferType == TransferType.RETURN) {
+            if (requestDTO.getFromOfficeId() == null) {
+                throw new RuntimeException("Source office (fromOfficeId) is required for " + transferType + " transfers");
+            }
+            fromOffice = officeRepository.findById(requestDTO.getFromOfficeId())
+                    .orElseThrow(() -> new RuntimeException("Source office not found"));
+        }
+        
+        if (transferType == TransferType.MOVEMENT) {
+            if (requestDTO.getEmployeeId() == null) {
+                throw new RuntimeException("Employee is required for MOVEMENT transfers");
+            }
+            employee = employeeRepository.findById(requestDTO.getEmployeeId())
+                    .orElseThrow(() -> new RuntimeException("Employee not found"));
         }
 
-        ItemDistribution distribution = new ItemDistribution(item, office, user, requestDTO.getQuantity());
+        // For TRANSFER type, check office inventory instead of global inventory
+        if (transferType == TransferType.TRANSFER) {
+            if (!officeInventoryService.hasSufficientStock(fromOffice, item, requestDTO.getQuantity())) {
+                throw new RuntimeException("Insufficient stock in source office. Please check office inventory.");
+            }
+        } else {
+            // Check if item has sufficient quantity for other transfer types
+            if (item.getQuantity() < requestDTO.getQuantity()) {
+                throw new RuntimeException("Insufficient item quantity. Available: " + item.getQuantity() + ", Requested: " + requestDTO.getQuantity());
+            }
+        }
+
+        ItemDistribution distribution = new ItemDistribution(item, toOffice, user, requestDTO.getQuantity());
+        distribution.setFromOffice(fromOffice);
+        distribution.setToOffice(toOffice);
+        distribution.setEmployee(employee);
+        distribution.setTransferType(transferType);
+        
         if (requestDTO.getDateDistributed() != null && !requestDTO.getDateDistributed().isEmpty()) {
             String dateStr = requestDTO.getDateDistributed();
             LocalDateTime dateTime;
@@ -96,9 +145,20 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
 
         ItemDistribution savedDistribution = distributionRepository.save(distribution);
 
-        // Update item quantity
-        item.setQuantity(item.getQuantity() - requestDTO.getQuantity());
-        itemRepository.save(item);
+        // Handle office inventory based on transfer type
+        if (transferType == TransferType.TRANSFER) {
+            // Transfer items between offices
+            officeInventoryService.transferItems(fromOffice, toOffice, item, requestDTO.getQuantity());
+        } else if (transferType == TransferType.ALLOCATION) {
+            // For allocation, add to destination office inventory and reduce global stock
+            item.setQuantity(item.getQuantity() - requestDTO.getQuantity());
+            itemRepository.save(item);
+            officeInventoryService.adjustInventory(toOffice, item, requestDTO.getQuantity());
+        } else {
+            // For other types (MOVEMENT, RETURN), just update global stock
+            item.setQuantity(item.getQuantity() - requestDTO.getQuantity());
+            itemRepository.save(item);
+        }
 
         return convertToDTO(savedDistribution);
     }
@@ -116,18 +176,41 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
         Item item = distribution.getItem();
         item.setQuantity(item.getQuantity() + distribution.getQuantity());
 
-        // Update distribution
+        // Update distribution fields
         if (requestDTO.getItemId() != null) {
             Item newItem = itemRepository.findById(requestDTO.getItemId())
                     .orElseThrow(() -> new RuntimeException("Item not found"));
             distribution.setItem(newItem);
             item = newItem;
         }
+        
+        // Update office fields (support both old and new format)
         if (requestDTO.getOfficeId() != null) {
             Office office = officeRepository.findById(requestDTO.getOfficeId())
                     .orElseThrow(() -> new RuntimeException("Office not found"));
             distribution.setOffice(office);
+            distribution.setToOffice(office);
         }
+        if (requestDTO.getToOfficeId() != null) {
+            Office toOffice = officeRepository.findById(requestDTO.getToOfficeId())
+                    .orElseThrow(() -> new RuntimeException("Destination office not found"));
+            distribution.setToOffice(toOffice);
+            distribution.setOffice(toOffice); // Backward compatibility
+        }
+        if (requestDTO.getFromOfficeId() != null) {
+            Office fromOffice = officeRepository.findById(requestDTO.getFromOfficeId())
+                    .orElseThrow(() -> new RuntimeException("Source office not found"));
+            distribution.setFromOffice(fromOffice);
+        }
+        if (requestDTO.getEmployeeId() != null) {
+            Employee employee = employeeRepository.findById(requestDTO.getEmployeeId())
+                    .orElseThrow(() -> new RuntimeException("Employee not found"));
+            distribution.setEmployee(employee);
+        }
+        if (requestDTO.getTransferType() != null) {
+            distribution.setTransferType(requestDTO.getTransferType());
+        }
+        
         if (requestDTO.getUserId() != null) {
             User user = userRepository.findById(requestDTO.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -169,17 +252,20 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
 
         ItemDistribution savedDistribution = distributionRepository.save(distribution);
 
+        // Get the office for inventory adjustment (prefer toOffice, fallback to office)
+        Office officeForInventory = distribution.getToOffice() != null ? distribution.getToOffice() : distribution.getOffice();
+        
         // Handle office inventory based on status change
         if (oldStatus != DistributionStatus.APPROVED && newStatus == DistributionStatus.APPROVED) {
             // Status changed to APPROVED, add to office inventory
-            officeInventoryService.adjustInventory(distribution.getOffice(), item, newQuantity);
+            officeInventoryService.adjustInventory(officeForInventory, item, newQuantity);
         } else if (oldStatus == DistributionStatus.APPROVED && newStatus != DistributionStatus.APPROVED) {
             // Status changed from APPROVED to something else, remove from office inventory
-            officeInventoryService.adjustInventory(distribution.getOffice(), item, -newQuantity);
+            officeInventoryService.adjustInventory(officeForInventory, item, -newQuantity);
         } else if (oldStatus == DistributionStatus.APPROVED && newStatus == DistributionStatus.APPROVED && !newQuantity.equals(distribution.getQuantity())) {
             // Quantity changed while still APPROVED, adjust inventory difference
             int quantityDifference = newQuantity - distribution.getQuantity();
-            officeInventoryService.adjustInventory(distribution.getOffice(), item, quantityDifference);
+            officeInventoryService.adjustInventory(officeForInventory, item, quantityDifference);
         }
 
         return convertToDTO(savedDistribution);
@@ -214,21 +300,47 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
     }
 
     private ItemDistributionDTO convertToDTO(ItemDistribution distribution) {
-        return new ItemDistributionDTO(
-                distribution.getId(),
-                distribution.getItem().getId(),
-                distribution.getItem().getName(),
-                distribution.getOffice().getId(),
-                distribution.getOffice().getName(),
-                distribution.getUser().getId(),
-                distribution.getUser().getName(),
-                distribution.getQuantity(),
-                distribution.getDateDistributed(),
-                distribution.getRemarks(),
-                distribution.getStatus().toString(),
-                distribution.getIsActive(),
-                distribution.getCreatedAt(),
-                distribution.getUpdatedAt()
-        );
+        ItemDistributionDTO dto = new ItemDistributionDTO();
+        dto.setId(distribution.getId());
+        dto.setItemId(distribution.getItem().getId());
+        dto.setItemName(distribution.getItem().getName());
+        
+        // Backward compatibility: set officeId and officeName from toOffice
+        if (distribution.getToOffice() != null) {
+            dto.setOfficeId(distribution.getToOffice().getId());
+            dto.setOfficeName(distribution.getToOffice().getName());
+            dto.setToOfficeId(distribution.getToOffice().getId());
+            dto.setToOfficeName(distribution.getToOffice().getName());
+        } else if (distribution.getOffice() != null) {
+            dto.setOfficeId(distribution.getOffice().getId());
+            dto.setOfficeName(distribution.getOffice().getName());
+            dto.setToOfficeId(distribution.getOffice().getId());
+            dto.setToOfficeName(distribution.getOffice().getName());
+        }
+        
+        // Set fromOffice if exists
+        if (distribution.getFromOffice() != null) {
+            dto.setFromOfficeId(distribution.getFromOffice().getId());
+            dto.setFromOfficeName(distribution.getFromOffice().getName());
+        }
+        
+        // Set employee if exists
+        if (distribution.getEmployee() != null) {
+            dto.setEmployeeId(distribution.getEmployee().getId());
+            dto.setEmployeeName(distribution.getEmployee().getName());
+        }
+        
+        dto.setUserId(distribution.getUser().getId());
+        dto.setUserName(distribution.getUser().getName());
+        dto.setQuantity(distribution.getQuantity());
+        dto.setDateDistributed(distribution.getDateDistributed());
+        dto.setRemarks(distribution.getRemarks());
+        dto.setStatus(distribution.getStatus().toString());
+        dto.setTransferType(distribution.getTransferType().toString());
+        dto.setIsActive(distribution.getIsActive());
+        dto.setCreatedAt(distribution.getCreatedAt());
+        dto.setUpdatedAt(distribution.getUpdatedAt());
+        
+        return dto;
     }
 }

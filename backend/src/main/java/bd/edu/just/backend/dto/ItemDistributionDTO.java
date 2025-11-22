@@ -7,14 +7,21 @@ public class ItemDistributionDTO {
     private Long id;
     private Long itemId;
     private String itemName;
-    private Long officeId;
-    private String officeName;
+    private Long officeId; // Deprecated: kept for backward compatibility
+    private String officeName; // Deprecated
+    private Long fromOfficeId;
+    private String fromOfficeName;
+    private Long toOfficeId;
+    private String toOfficeName;
+    private Long employeeId;
+    private String employeeName;
     private Long userId;
     private String userName;
     private Integer quantity;
     private LocalDateTime dateDistributed;
     private String remarks;
     private String status;
+    private String transferType;
     private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -29,6 +36,8 @@ public class ItemDistributionDTO {
         this.itemName = itemName;
         this.officeId = officeId;
         this.officeName = officeName;
+        this.toOfficeId = officeId; // Backward compatibility
+        this.toOfficeName = officeName;
         this.userId = userId;
         this.userName = userName;
         this.quantity = quantity;
@@ -38,6 +47,7 @@ public class ItemDistributionDTO {
         this.isActive = isActive;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.transferType = "ALLOCATION";
     }
 
     // Getters and Setters
@@ -79,6 +89,54 @@ public class ItemDistributionDTO {
 
     public void setOfficeName(String officeName) {
         this.officeName = officeName;
+    }
+
+    public Long getFromOfficeId() {
+        return fromOfficeId;
+    }
+
+    public void setFromOfficeId(Long fromOfficeId) {
+        this.fromOfficeId = fromOfficeId;
+    }
+
+    public String getFromOfficeName() {
+        return fromOfficeName;
+    }
+
+    public void setFromOfficeName(String fromOfficeName) {
+        this.fromOfficeName = fromOfficeName;
+    }
+
+    public Long getToOfficeId() {
+        return toOfficeId;
+    }
+
+    public void setToOfficeId(Long toOfficeId) {
+        this.toOfficeId = toOfficeId;
+    }
+
+    public String getToOfficeName() {
+        return toOfficeName;
+    }
+
+    public void setToOfficeName(String toOfficeName) {
+        this.toOfficeName = toOfficeName;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
     public Long getUserId() {
@@ -127,6 +185,14 @@ public class ItemDistributionDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getTransferType() {
+        return transferType;
+    }
+
+    public void setTransferType(String transferType) {
+        this.transferType = transferType;
     }
 
     public Boolean getIsActive() {

@@ -23,6 +23,7 @@ import Can from "@/components/auth/Can";
 export default function PurchaseTablePage() {
   const router = useRouter();
   const columns = [
+    { key: "officeName" as keyof Purchase, label: "Office" },
     { key: "vendorName" as keyof Purchase, label: "Vendor" },
     { key: "totalPrice" as keyof Purchase, label: "Total Price" },
     { key: "purchaseDate" as keyof Purchase, label: "Purchase Date" },
@@ -115,7 +116,7 @@ export default function PurchaseTablePage() {
       {/* Page Header */}
       <PageHeader>
         <PageTitle title="Purchase Management" totalCount={totalCount} />
-        <PageSubtitle subtitle="Manage all item purchases and their records" />
+        <PageSubtitle subtitle="Manage purchases for your office. All purchases are automatically added to your office inventory." />
         <PageToolbar>
           <Can page="/purchases" action="create">
             <Button onClick={() => router.push('/purchases/new')} className="mr-4">

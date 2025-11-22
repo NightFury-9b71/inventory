@@ -2,26 +2,34 @@ export interface Distribution {
   id: number;
   itemId: number;
   itemName: string;
-  officeId: number;
-  officeName: string;
+  fromOfficeId?: number;
+  fromOfficeName?: string;
+  toOfficeId: number;
+  toOfficeName: string;
   userId: number;
   userName: string;
+  employeeId?: number;
+  employeeName?: string;
   quantity: number;
   dateDistributed: string;
   remarks?: string;
   status: string;
+  transferType: 'ALLOCATION' | 'TRANSFER' | 'MOVEMENT' | 'RETURN';
   isActive: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface DistributionFormData {
-  itemId: number;
-  officeId: number;
+  itemId?: number;
+  fromOfficeId?: number;
+  toOfficeId?: number;
   userId: number;
+  employeeId?: number;
   quantity: number;
   dateDistributed: string;
   remarks?: string;
+  transferType: 'ALLOCATION' | 'TRANSFER' | 'MOVEMENT' | 'RETURN';
 }
 
 export interface OfficeInventory {

@@ -7,7 +7,13 @@ This is a monorepo for the **Inventory Management System** of **Jashore Universi
 
 ---
 
-## 🚀 Getting Started
+## � Documentation
+
+- **[Office Admin & Inventory Management Guide](./OFFICE_ADMIN_GUIDE.md)** - Complete guide for office administrators on managing purchases, transfers, and inventory
+
+---
+
+## �🚀 Getting Started
 
 ### Backend
 

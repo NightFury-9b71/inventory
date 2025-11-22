@@ -24,10 +24,22 @@ export const getDistributionById = async (id: number): Promise<Distribution> => 
 };
 
 export const createDistribution = async (distribution: DistributionFormData): Promise<Distribution> => {
-  const response = await api.post(ENDPOINTS.create_distribution, {
-    ...distribution,
-    userId: parseInt(distribution.userId.toString())
-  });
+  // Build payload according to backend ItemDistributionRequestDTO
+  const payload: any = {
+    itemId: distribution.itemId,
+    userId: parseInt(distribution.userId.toString()),
+    fromOfficeId: distribution.fromOfficeId, // Always include fromOfficeId (user's office)
+    toOfficeId: distribution.toOfficeId,
+    quantity: distribution.quantity,
+    dateDistributed: distribution.dateDistributed,
+    remarks: distribution.remarks || null,
+    transferType: 'TRANSFER', // Always TRANSFER for office-to-office transfers
+  };
+
+  // Add officeId for backward compatibility (same as toOfficeId)
+  payload.officeId = distribution.toOfficeId;
+  
+  const response = await api.post(ENDPOINTS.create_distribution, payload);
   return response.data;
 };
 

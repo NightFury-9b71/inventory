@@ -19,7 +19,21 @@ public class ItemDistribution {
     @ManyToOne
     @JoinColumn(name = "office_id", nullable = false)
     @JsonIgnore
-    private Office office;
+    private Office office; // Deprecated: kept for backward compatibility
+
+    @ManyToOne
+    @JoinColumn(name = "from_office_id")
+    @JsonIgnore
+    private Office fromOffice;
+
+    @ManyToOne
+    @JoinColumn(name = "to_office_id")
+    @JsonIgnore
+    private Office toOffice;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -41,6 +55,9 @@ public class ItemDistribution {
     @Column(name = "status", nullable = false)
     private DistributionStatus status = DistributionStatus.PENDING;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transfer_type", nullable = false)
+    private TransferType transferType = TransferType.ALLOCATION;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -67,10 +84,12 @@ public class ItemDistribution {
     public ItemDistribution(Item item, Office office, User user, Integer quantity) {
         this.item = item;
         this.office = office;
+        this.toOffice = office; // Set toOffice for backward compatibility
         this.user = user;
         this.quantity = quantity;
         this.isActive = true;
         this.status = DistributionStatus.PENDING;
+        this.transferType = TransferType.ALLOCATION;
     }
 
     // Getters and Setters
@@ -96,6 +115,30 @@ public class ItemDistribution {
 
     public void setOffice(Office office) {
         this.office = office;
+    }
+
+    public Office getFromOffice() {
+        return fromOffice;
+    }
+
+    public void setFromOffice(Office fromOffice) {
+        this.fromOffice = fromOffice;
+    }
+
+    public Office getToOffice() {
+        return toOffice;
+    }
+
+    public void setToOffice(Office toOffice) {
+        this.toOffice = toOffice;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public User getUser() {
@@ -144,6 +187,14 @@ public class ItemDistribution {
 
     public void setStatus(DistributionStatus status) {
         this.status = status;
+    }
+
+    public TransferType getTransferType() {
+        return transferType;
+    }
+
+    public void setTransferType(TransferType transferType) {
+        this.transferType = transferType;
     }
 
     public LocalDateTime getCreatedAt() {
