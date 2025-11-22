@@ -2,8 +2,7 @@ package bd.edu.just.backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,21 +27,23 @@ public class Office {
     private String nameBn;
 
     @OneToMany(mappedBy = "parentOffice", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnore  // Prevent circular reference in JSON serialization
     private List<Office> subOffices;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    @JsonBackReference
+    @JsonIgnore  // Prevent circular reference in JSON serialization
     private Office parentOffice;
 
     @Transient
     private Long parentId;
 
     @OneToMany(mappedBy = "office", cascade = CascadeType.ALL)
+    @JsonIgnore  // Prevent loading all distributions
     private List<ItemDistribution> itemDistributions;
 
     @OneToMany(mappedBy = "office", cascade = CascadeType.ALL)
+    @JsonIgnore  // Prevent loading all employees
     private List<Employee> employees;
 
     @Enumerated(EnumType.STRING)

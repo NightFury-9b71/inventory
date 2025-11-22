@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import bd.edu.just.backend.service.OfficeService;
 import bd.edu.just.backend.model.Office;
 import bd.edu.just.backend.dto.OfficeResponseDTO;
+import bd.edu.just.backend.dto.SimpleOfficeDTO;
 import java.util.List;
 
 @RestController
@@ -34,9 +35,20 @@ public class OfficeController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Office>> getAllOfficesUnfiltered() {
+    public ResponseEntity<List<SimpleOfficeDTO>> getAllOfficesUnfiltered() {
         List<Office> offices = officeService.getAllOffices();
-        return ResponseEntity.ok(offices);
+        // Convert to simple DTOs without nested structure to avoid circular references
+        List<SimpleOfficeDTO> officeDTOs = offices.stream()
+                .map(office -> new SimpleOfficeDTO(
+                    office.getId(),
+                    office.getName(),
+                    office.getCode(),
+                    office.getType(),
+                    office.getParentOffice() != null ? office.getParentOffice().getId() : null,
+                    office.getIsActive()
+                ))
+                .toList();
+        return ResponseEntity.ok(officeDTOs);
     }
 
     @GetMapping("/parent")

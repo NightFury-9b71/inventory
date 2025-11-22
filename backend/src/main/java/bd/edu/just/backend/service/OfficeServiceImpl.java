@@ -39,7 +39,10 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public List<Office> getAllOffices() {
-        return officeRepository.findAll();
+        // Return only active offices for general use
+        return officeRepository.findAll().stream()
+                .filter(office -> office.getIsActive() != null && office.getIsActive())
+                .toList();
     }
 
     @Override

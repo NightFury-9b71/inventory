@@ -51,8 +51,11 @@ export default function NewDistributionForm({
         const inventoryArray = Array.isArray(fetchedInventory) ? fetchedInventory : [];
         const officesArray = Array.isArray(fetchedOffices) ? fetchedOffices : [];
         
-        setOfficeInventory(inventoryArray.filter(inv => inv.quantity > 0));
-        setOffices(officesArray.filter(office => office.isActive));
+        const filteredInventory = inventoryArray.filter(inv => inv.quantity > 0);
+        const filteredOffices = officesArray.filter(office => office.isActive);
+        
+        setOfficeInventory(filteredInventory);
+        setOffices(filteredOffices);
         setInventoryError(null);
         setOfficesError(null);
       } catch (err) {
@@ -107,6 +110,19 @@ export default function NewDistributionForm({
               <p className="text-sm font-semibold text-amber-800">No Inventory Available</p>
               <p className="text-sm text-amber-700">
                 Your office doesn't have any items in inventory. Items must be in your office inventory before they can be transferred.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* No Offices Warning */}
+        {!loadingOffices && !officesError && offices.length === 0 && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
+            <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-amber-800">No Offices Available</p>
+              <p className="text-sm text-amber-700">
+                No active offices found in the system. Please ensure there are active offices in the database.
               </p>
             </div>
           </div>
