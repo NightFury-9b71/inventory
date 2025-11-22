@@ -72,7 +72,7 @@ export default function PurchaseDetailsCard({ purchase }: Props) {
           <div className="mt-2 space-y-2">
             <div className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded">
               <span className="text-sm text-gray-600">Total Amount</span>
-              <span className="text-sm font-medium font-mono">{purchase.totalPrice?.toFixed(2)} Tk</span>
+              <span className="text-sm font-medium font-mono">{purchase.totalPrice?.toFixed(2)} ৳</span>
             </div>
             <div className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded">
               <span className="text-sm text-gray-600">Date</span>

@@ -193,7 +193,7 @@ export default function NewPurchaseForm({
               <div className="flex justify-end">
                 <div className="bg-primary/10 p-4 rounded-lg">
                   <Label className="text-lg">Grand Total:</Label>
-                  <p className="text-2xl font-bold">${calculateGrandTotal()}</p>
+                  <p className="text-2xl font-bold">৳{calculateGrandTotal()}</p>
                 </div>
               </div>
             )}

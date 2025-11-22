@@ -67,7 +67,7 @@ export default function DashboardPage() {
         <Card className="p-6 hover:shadow-lg transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 mb-2">Purchase Value (Tk)</p>
+              <p className="text-sm text-slate-600 mb-2">Purchase Value (৳)</p>
               <p className="text-3xl font-bold text-slate-900">
                 ৳{(stats?.totalPurchaseValue/1000 || 0).toFixed(2)}K
               </p>
