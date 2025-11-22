@@ -4,8 +4,10 @@ export interface Distribution {
   itemName: string;
   fromOfficeId?: number;
   fromOfficeName?: string;
+  fromOfficeCode?: string;
   toOfficeId: number;
   toOfficeName: string;
+  toOfficeCode?: string;
   userId: number;
   userName: string;
   employeeId?: number;

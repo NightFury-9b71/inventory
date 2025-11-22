@@ -19,21 +19,46 @@ import { Plus, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Can from "@/components/auth/Can";
+import { Badge } from "@/components/ui/badge";
 
 export default function DistributionsPage() {
   const router = useRouter();
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      case 'APPROVED':
+        return 'bg-green-100 text-green-800 border-green-300';
+      case 'COMPLETED':
+        return 'bg-blue-100 text-blue-800 border-blue-300';
+      case 'CANCELLED':
+        return 'bg-red-100 text-red-800 border-red-300';
+      case 'REJECTED':
+        return 'bg-gray-100 text-gray-800 border-gray-300';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-300';
+    }
+  };
+
   const columns = [
     { key: "itemName" as keyof Distribution, label: "Item" },
     { key: "quantity" as keyof Distribution, label: "Quantity" },
-    { key: "fromOfficeName" as keyof Distribution, label: "From Office" },
-    { key: "toOfficeName" as keyof Distribution, label: "To Office" },
+    { key: "fromOfficeCode" as keyof Distribution, label: "From Office" },
+    { key: "toOfficeCode" as keyof Distribution, label: "To Office" },
     { key: "transferType" as keyof Distribution, label: "Type" },
     { key: "userName" as keyof Distribution, label: "Initiated By" },
     { key: "employeeName" as keyof Distribution, label: "Employee" },
     { key: "dateDistributed" as keyof Distribution, label: "Date" },
-    { key: "status" as keyof Distribution, label: "Status" },
-    { key: "isActive" as keyof Distribution, label: "Active" },
+    { 
+      key: "status" as keyof Distribution, 
+      label: "Status",
+      render: (value: any) => (
+        <Badge className={getStatusColor(value as string)}>
+          {value}
+        </Badge>
+      )
+    },
   ];
 
   const filters = [
@@ -88,7 +113,7 @@ export default function DistributionsPage() {
   } = useTable({
     data: [],
     columns,
-    searchableKeys: ['itemName', 'fromOfficeName', 'toOfficeName', 'userName', 'employeeName'],
+    searchableKeys: ['itemName', 'fromOfficeCode', 'toOfficeCode', 'userName', 'employeeName'],
     filterableKeys: ['transferType', 'status', 'isActive'],
     pagination: {
       enabled: true,

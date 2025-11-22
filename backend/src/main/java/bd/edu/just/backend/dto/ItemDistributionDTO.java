@@ -11,8 +11,10 @@ public class ItemDistributionDTO {
     private String officeName; // Deprecated
     private Long fromOfficeId;
     private String fromOfficeName;
+    private String fromOfficeCode;
     private Long toOfficeId;
     private String toOfficeName;
+    private String toOfficeCode;
     private Long employeeId;
     private String employeeName;
     private Long userId;
@@ -107,6 +109,14 @@ public class ItemDistributionDTO {
         this.fromOfficeName = fromOfficeName;
     }
 
+    public String getFromOfficeCode() {
+        return fromOfficeCode;
+    }
+
+    public void setFromOfficeCode(String fromOfficeCode) {
+        this.fromOfficeCode = fromOfficeCode;
+    }
+
     public Long getToOfficeId() {
         return toOfficeId;
     }
@@ -121,6 +131,14 @@ public class ItemDistributionDTO {
 
     public void setToOfficeName(String toOfficeName) {
         this.toOfficeName = toOfficeName;
+    }
+
+    public String getToOfficeCode() {
+        return toOfficeCode;
+    }
+
+    public void setToOfficeCode(String toOfficeCode) {
+        this.toOfficeCode = toOfficeCode;
     }
 
     public Long getEmployeeId() {

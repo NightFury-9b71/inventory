@@ -2,55 +2,16 @@ import { UserRole as Role } from "@/services/auth_service";
 
 export type { Role };
 
-/**
- * ============================================================================
- * INVENTORY MANAGEMENT SYSTEM - SIMPLIFIED ACCESS CONTROL POLICIES
- * ============================================================================
- * 
- * Role Structure (Simplified):
- * ----------------------------
- * 1. **SUPER_ADMIN**: System-wide administrator with full access to all offices
- * 2. **ADMIN**: Office administrator with purchasing power
- *    - Can manage their office and all child offices
- *    - Has full CRUD access to items, purchases, and distributions
- *    - Can create purchases and manage inventory
- * 3. **USER**: Regular user without purchasing power
- *    - Can only view and manage distributions in their office
- *    - Cannot create purchases
- *    - Limited to their assigned office only
- * 
- * Office-Based Access Control:
- * ---------------------------
- * - Each user is assigned to ONE office through their designation
- * - **ADMIN** can access: Their office + ALL child offices (recursive)
- * - **USER** can access: ONLY their assigned office
- * - **SUPER_ADMIN** can access: ALL offices
- * 
- * Key Changes from Previous System:
- * ---------------------------------
- * - Removed: PROCUREMENT_MANAGER, DEPARTMENT_HEAD, FACULTY_MEMBER, STAFF, STUDENT, VIEWER, etc.
- * - Simplified to: SUPER_ADMIN, ADMIN, USER
- * - Each office should have assigned ADMIN(s) and USER(s)
- * - Inventory is now office-specific
- */
-
 type Policy = {
   [page: string]: { actions: string[] };
 };
 
 export const policies: Record<Role, Policy> = {
-  /**
-   * SUPER_ADMIN - Full System Access
-   * Can access and manage all features across all offices
-   */
+
   SUPER_ADMIN: {
     "*": { actions: ["*"] },
   },
 
-  /**
-   * ADMIN - Office Administrator
-   * Has purchasing power and can manage their office + child offices
-   */
   ADMIN: {
     "/profile": { actions: ["view", "edit"] },
     "/dashboard": { actions: ["view"] },
@@ -70,10 +31,6 @@ export const policies: Record<Role, Policy> = {
     "/settings": { actions: ["view", "edit"] },
   },
 
-  /**
-   * USER - Regular User
-   * No purchasing power, limited to viewing and basic operations in their office
-   */
   USER: {
     "/profile": { actions: ["view", "edit"] },
     "/dashboard": { actions: ["view"] },
@@ -84,9 +41,7 @@ export const policies: Record<Role, Policy> = {
     "/inventory": { actions: ["view"] },
     "/barcode": { actions: ["view"] },
     "/purchases": { actions: ["view"] },
-    "/distributions": { actions: ["view", "create"] },
-    "/office-distributions": { actions: ["view", "create"] },
-    "/movements": { actions: ["view"] },
+    "/distributions": { actions: ["view"] },
     "/reports": { actions: ["view"] },
   },
 

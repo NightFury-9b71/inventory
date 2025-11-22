@@ -17,7 +17,7 @@ export default function DemoCredentialsCard({ onFillDemo }: Props) {
         <p className="text-sm text-amber-800 font-medium mb-2">
           🚀 Demo Credentials (Click to fill):
         </p>
-        <p className="text-xs text-amber-700">username: admin</p>
+        <p className="text-xs text-amber-700">username: admin_fet</p>
         <p className="text-xs text-amber-700">Password: password</p>
       </CardContent>
     </Card>

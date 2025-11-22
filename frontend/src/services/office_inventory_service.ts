@@ -1,9 +1,12 @@
 import api from "@/lib/api";
 import { OfficeInventory } from "@/types/distribution";
+import { ItemInstance } from "@/types/purchase";
 
 export const ENDPOINTS = {
   get_my_office_inventory: "/office-inventory/my-office",
+  get_my_office_item_instances: "/office-inventory/my-office/item-instances",
   get_inventory_by_office: (officeId: number) => `/office-inventory/office/${officeId}`,
+  get_office_item_instances: (officeId: number) => `/office-inventory/office/${officeId}/item-instances`,
   get_inventory_by_item: (itemId: number) => `/office-inventory/item/${itemId}`,
   get_available_items_by_office: (officeId: number) => `/office-inventory/office/${officeId}/available`,
   get_total_quantity_by_item: (itemId: number) => `/office-inventory/item/${itemId}/total-quantity`,
@@ -66,5 +69,14 @@ export const checkStock = async (
   const response = await api.get(ENDPOINTS.check_stock, {
     params: { officeId, itemId, requiredQuantity }
   });
+  return response.data;
+};
+export const getMyOfficeItemInstances = async (): Promise<ItemInstance[]> => {
+  const response = await api.get(ENDPOINTS.get_my_office_item_instances);
+  return response.data;
+};
+
+export const getOfficeItemInstances = async (officeId: number): Promise<ItemInstance[]> => {
+  const response = await api.get(ENDPOINTS.get_office_item_instances(officeId));
   return response.data;
 };

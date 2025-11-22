@@ -25,7 +25,6 @@ export default function ItemTablePage() {
     { key: "code" as keyof Item, label: "Code" },
     { key: "categoryName" as keyof Item, label: "Category" },
     { key: "unitName" as keyof Item, label: "Unit" },
-    { key: "quantity" as keyof Item, label: "Quantity" },
     { key: "isActive" as keyof Item, label: "Status" },
   ];
 

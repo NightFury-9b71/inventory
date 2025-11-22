@@ -1,12 +1,15 @@
 package bd.edu.just.backend.controller;
 
 import bd.edu.just.backend.dto.OfficeInventoryDTO;
+import bd.edu.just.backend.dto.ItemInstanceDTO;
 import bd.edu.just.backend.model.Item;
 import bd.edu.just.backend.model.Office;
 import bd.edu.just.backend.model.OfficeInventory;
+import bd.edu.just.backend.model.ItemInstance;
 import bd.edu.just.backend.service.OfficeInventoryService;
 import bd.edu.just.backend.service.OfficeService;
 import bd.edu.just.backend.service.UserOfficeAccessService;
+import bd.edu.just.backend.repository.ItemInstanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +26,17 @@ public class OfficeInventoryController {
     private final OfficeInventoryService officeInventoryService;
     private final UserOfficeAccessService userOfficeAccessService;
     private final OfficeService officeService;
+    private final ItemInstanceRepository itemInstanceRepository;
 
     @Autowired
     public OfficeInventoryController(OfficeInventoryService officeInventoryService,
                                    UserOfficeAccessService userOfficeAccessService,
-                                   OfficeService officeService) {
+                                   OfficeService officeService,
+                                   ItemInstanceRepository itemInstanceRepository) {
         this.officeInventoryService = officeInventoryService;
         this.userOfficeAccessService = userOfficeAccessService;
         this.officeService = officeService;
+        this.itemInstanceRepository = itemInstanceRepository;
     }
 
     @GetMapping("/my-office")
@@ -216,6 +222,88 @@ public class OfficeInventoryController {
 
         boolean hasStock = officeInventoryService.hasSufficientStock(officeOpt.get(), item, requiredQuantity);
         return ResponseEntity.ok(hasStock);
+    }
+
+    @GetMapping("/office/{officeId}/item-instances")
+    public ResponseEntity<List<ItemInstanceDTO>> getOfficeItemInstances(@PathVariable Long officeId) {
+        // Check if user can access this office
+        if (!userOfficeAccessService.canAccessOffice(officeId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Optional<Office> officeOpt = officeService.getOfficeById(officeId);
+        if (!officeOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<ItemInstance> instances = itemInstanceRepository.findByOfficeId(officeId);
+        List<ItemInstanceDTO> dtoList = instances.stream()
+                .map(this::convertItemInstanceToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @GetMapping("/my-office/item-instances")
+    public ResponseEntity<List<ItemInstanceDTO>> getMyOfficeItemInstances() {
+        List<Long> accessibleOfficeIds = userOfficeAccessService.getCurrentUserAccessibleOfficeIds();
+
+        if (accessibleOfficeIds.isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+
+        List<ItemInstance> instances = accessibleOfficeIds.stream()
+                .flatMap(officeId -> itemInstanceRepository.findByOfficeId(officeId).stream())
+                .collect(Collectors.toList());
+
+        List<ItemInstanceDTO> dtoList = instances.stream()
+                .map(this::convertItemInstanceToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtoList);
+    }
+
+    private ItemInstanceDTO convertItemInstanceToDTO(ItemInstance instance) {
+        ItemInstanceDTO dto = new ItemInstanceDTO();
+        dto.setId(instance.getId());
+        dto.setItemId(instance.getItem().getId());
+        dto.setItemName(instance.getItem().getName());
+        dto.setItemCode(instance.getItem().getCode());
+        dto.setItemDescription(instance.getItem().getDescription());
+        dto.setCategoryName(instance.getItem().getCategory() != null ? 
+            instance.getItem().getCategory().getName() : null);
+        dto.setPurchaseId(instance.getPurchase().getId());
+        dto.setBarcode(instance.getBarcode());
+        dto.setUnitPrice(instance.getUnitPrice());
+        dto.setStatus(instance.getStatus().name());
+        dto.setRemarks(instance.getRemarks());
+        dto.setCreatedAt(instance.getCreatedAt());
+        dto.setUpdatedAt(instance.getUpdatedAt());
+        
+        // Distribution info
+        if (instance.getDistributedToOffice() != null) {
+            dto.setDistributedToOfficeId(instance.getDistributedToOffice().getId());
+            dto.setDistributedToOfficeName(instance.getDistributedToOffice().getName());
+        }
+        dto.setDistributedAt(instance.getDistributedAt());
+
+        // Owner info
+        if (instance.getOwner() != null) {
+            dto.setOwnerId(instance.getOwner().getId());
+            dto.setOwnerName(instance.getOwner().getName());
+        }
+        
+        // Purchase details
+        if (instance.getPurchase() != null) {
+            dto.setVendorName(instance.getPurchase().getVendorName());
+            dto.setVendorContact(instance.getPurchase().getVendorContact());
+            dto.setPurchaseDate(instance.getPurchase().getPurchaseDate());
+            dto.setInvoiceNumber(instance.getPurchase().getInvoiceNumber());
+            dto.setPurchasedByName(instance.getPurchase().getPurchasedBy() != null ? 
+                instance.getPurchase().getPurchasedBy().getName() : null);
+        }
+        
+        return dto;
     }
 
     private OfficeInventoryDTO convertToDTO(OfficeInventory inventory) {

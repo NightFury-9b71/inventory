@@ -23,7 +23,7 @@ public interface ItemInstanceRepository extends JpaRepository<ItemInstance, Long
     @Query("SELECT ii FROM ItemInstance ii WHERE ii.item.id = :itemId AND ii.status = 'IN_STOCK'")
     List<ItemInstance> findAvailableByItemId(@Param("itemId") Long itemId);
 
-    @Query("SELECT ii FROM ItemInstance ii WHERE ii.distributedToOffice.id = :officeId")
+    @Query("SELECT ii FROM ItemInstance ii WHERE ii.purchase.office.id = :officeId OR ii.distributedToOffice.id = :officeId")
     List<ItemInstance> findByOfficeId(@Param("officeId") Long officeId);
 
     List<ItemInstance> findByOwner(User owner);

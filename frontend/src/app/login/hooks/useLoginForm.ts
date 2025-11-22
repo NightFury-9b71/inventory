@@ -76,7 +76,7 @@ export function useLoginForm(onLoginSuccess?: (data: LoginFormData) => void) {
   const fillDemoCredentials = () => {
     setFormData((prev) => ({
       ...prev,
-      username: "admin",
+      username: "admin_fet",
       password: "password",
     }));
     toast.success("Demo credentials filled!");

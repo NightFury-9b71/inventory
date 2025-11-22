@@ -312,21 +312,18 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
         ItemDistribution distribution = distributionRepository.findById(distributionId)
                 .orElseThrow(() -> new RuntimeException("Distribution not found"));
         
-        // Get item instances for this item that were distributed to the target office
+        // Get item instances for this item that are at the target office
         Office targetOffice = distribution.getToOffice() != null ? distribution.getToOffice() : distribution.getOffice();
         Item item = distribution.getItem();
         
-        if (targetOffice == null) {
+        if (targetOffice == null || item == null) {
             return List.of();
         }
         
-        // Get all instances distributed to this office for this item
-        List<ItemInstance> instances = itemInstanceRepository.findByItemId(item.getId()).stream()
-                .filter(instance -> 
-                    instance.getDistributedToOffice() != null && 
-                    instance.getDistributedToOffice().getId().equals(targetOffice.getId()) &&
-                    instance.getStatus() == ItemInstance.ItemInstanceStatus.DISTRIBUTED
-                )
+        // Get all instances of this item at the target office
+        // This includes items purchased by the office OR distributed to it
+        List<ItemInstance> instances = itemInstanceRepository.findByOfficeId(targetOffice.getId()).stream()
+                .filter(instance -> instance.getItem().getId().equals(item.getId()))
                 .collect(Collectors.toList());
         
         return instances.stream()
@@ -389,17 +386,20 @@ public class ItemDistributionServiceImpl implements ItemDistributionService {
             dto.setOfficeName(distribution.getToOffice().getName());
             dto.setToOfficeId(distribution.getToOffice().getId());
             dto.setToOfficeName(distribution.getToOffice().getName());
+            dto.setToOfficeCode(distribution.getToOffice().getCode());
         } else if (distribution.getOffice() != null) {
             dto.setOfficeId(distribution.getOffice().getId());
             dto.setOfficeName(distribution.getOffice().getName());
             dto.setToOfficeId(distribution.getOffice().getId());
             dto.setToOfficeName(distribution.getOffice().getName());
+            dto.setToOfficeCode(distribution.getOffice().getCode());
         }
         
         // Set fromOffice if exists
         if (distribution.getFromOffice() != null) {
             dto.setFromOfficeId(distribution.getFromOffice().getId());
             dto.setFromOfficeName(distribution.getFromOffice().getName());
+            dto.setFromOfficeCode(distribution.getFromOffice().getCode());
         }
         
         // Set employee if exists
