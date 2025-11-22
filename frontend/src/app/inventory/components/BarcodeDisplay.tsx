@@ -143,7 +143,7 @@ export default function BarcodeDisplay() {
                         <g>
                           {Array.from({ length: 40 }, (_, i) => (
                             <rect
-                              key={i}
+                              key={`${barcode.id}-${i}`}
                               x={i * 5}
                               y="5"
                               width={Math.random() > 0.5 ? 2 : 3}
