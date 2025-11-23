@@ -47,11 +47,11 @@
                 SELECT id FROM roles WHERE name = 
                 CASE 
                     WHEN r.purchasing_power = 1 THEN 'ROLE_ADMIN'
-                    ELSE 'ROLE_USER'
+                    ELSE 'ROLE_STAFF'
                 END
                 LIMIT 1
             )
-            WHERE r.name NOT IN ('ROLE_ADMIN', 'ROLE_USER', 'ROLE_SUPER_ADMIN');
+            WHERE r.name NOT IN ('ROLE_ADMIN', 'ROLE_STAFF', 'ROLE_SUPER_ADMIN');
         </sql>
     </changeSet>
 

@@ -11,6 +11,7 @@
             INSERT INTO roles (name, description, purchasing_power) VALUES
             ('ROLE_SUPER_ADMIN', 'Super Administrator with full system access', true),
             ('ROLE_ADMIN', 'Administrator with management privileges', true),
+            ('ROLE_USER', 'Regular user with limited access', false),
             ('ROLE_PROCUREMENT_MANAGER', 'Procurement Manager with purchasing power', true),
             ('ROLE_DEPARTMENT_HEAD', 'Department Head with limited purchasing power', true),
             ('ROLE_FACULTY_MEMBER', 'Faculty Member with basic access', false),
